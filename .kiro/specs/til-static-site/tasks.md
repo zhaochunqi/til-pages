@@ -56,7 +56,7 @@
     - **验证: 需求 5.2**
 
 - [ ] 4. React 组件实现
-  - [ ] 4.1 创建 Markdown 渲染组件
+  - [x] 4.1 创建 Markdown 渲染组件
     - 实现 src/components/MarkdownRenderer.tsx 使用 react-markdown
     - 配置 remark-gfm 和 rehype-highlight 插件
     - 添加代码高亮和 GitHub 风格 markdown 支持
@@ -66,19 +66,19 @@
     - **属性 10: React Markdown 渲染一致性**
     - **验证: 需求 7.2, 7.4**
 
-  - [ ] 4.3 创建 TIL 卡片组件
+  - [x] 4.3 创建 TIL 卡片组件
     - 实现 src/components/TILCard.tsx 显示 TIL 条目
     - 集成 MarkdownRenderer 组件
     - 添加极简样式和响应式设计
     - _需求: 1.2, 6.1, 6.2_
 
-  - [ ] 4.4 创建分页组件
+  - [x] 4.4 创建分页组件
     - 实现 src/components/Pagination.tsx
     - 使用 Lucide React 图标
     - 添加页面导航逻辑
     - _需求: 1.3, 1.4, 6.3_
 
-  - [ ] 4.5 创建归档项组件
+  - [x] 4.5 创建归档项组件
     - 实现 src/components/ArchiveItem.tsx
     - 仅显示标题和链接
     - _需求: 3.1, 3.2_
