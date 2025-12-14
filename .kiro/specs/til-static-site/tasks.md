@@ -106,7 +106,7 @@
     - 实现分页数据获取和显示
     - _需求: 1.3, 1.4_
 
-  - [ ] 5.5 实现独立 TIL 页面
+  - [x] 5.5 实现独立 TIL 页面
     - 创建 src/app/[ulid]/page.tsx 显示单个条目
     - 使用 generateStaticParams 预生成所有 ULID 路由
     - 实现 404 处理
