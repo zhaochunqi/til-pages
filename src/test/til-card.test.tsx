@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
 import { ulid } from "ulid";
+import { describe, expect, it } from "vitest";
 import TILCard from "../components/TILCard";
 import type { TIL } from "../types";
 

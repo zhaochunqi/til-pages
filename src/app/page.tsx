@@ -1,9 +1,9 @@
 import { decodeTime } from "ulid";
+import Pagination from "../components/Pagination";
+import TILCard from "../components/TILCard";
 import { contentFetcher } from "../lib/content-fetcher";
 import { MarkdownParser } from "../lib/markdown-parser";
 import { Page, type TIL } from "../types";
-import Pagination from "../components/Pagination";
-import TILCard from "../components/TILCard";
 
 /**
  * Convert ParsedNote to TIL interface
@@ -29,13 +29,13 @@ async function getAllTILs(): Promise<TIL[]> {
 	try {
 		// Fetch raw notes from the content fetcher
 		const rawNotes = await contentFetcher.fetchValidNotes();
-		
+
 		// Parse markdown content and extract metadata
 		const parsedNotes = MarkdownParser.parseFiles(rawNotes);
-		
+
 		// Convert to TIL format
 		const tils = parsedNotes.map(parsedNoteToTIL);
-		
+
 		// Sort by creation date (newest first) using ULID timestamp
 		return tils.sort((a, b) => {
 			const timeA = decodeTime(a.ulid);
@@ -55,7 +55,7 @@ async function getAllTILs(): Promise<TIL[]> {
 export default async function Home() {
 	// Get all TIL entries
 	const allTILs = await getAllTILs();
-	
+
 	// Create first page (10 items)
 	const firstPage = Page.fromAllTILs(allTILs, 1);
 	const totalPages = Page.getTotalPages(allTILs.length);
@@ -76,11 +76,7 @@ export default async function Home() {
 			{firstPage.tils.length > 0 ? (
 				<div className="space-y-6">
 					{firstPage.tils.map((til) => (
-						<TILCard
-							key={til.ulid}
-							til={til}
-							showFullContent={true}
-						/>
+						<TILCard key={til.ulid} til={til} showFullContent={true} />
 					))}
 				</div>
 			) : (
@@ -93,11 +89,7 @@ export default async function Home() {
 
 			{/* Pagination */}
 			{totalPages > 1 && (
-				<Pagination
-					currentPage={1}
-					totalPages={totalPages}
-					basePath="/page"
-				/>
+				<Pagination currentPage={1} totalPages={totalPages} basePath="/page" />
 			)}
 		</div>
 	);

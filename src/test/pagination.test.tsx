@@ -1,10 +1,18 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import Pagination from "../components/Pagination";
 
 // Mock Next.js Link component
 vi.mock("next/link", () => ({
-	default: ({ href, children, ...props }: { href: string; children: React.ReactNode; [key: string]: unknown }) => (
+	default: ({
+		href,
+		children,
+		...props
+	}: {
+		href: string;
+		children: React.ReactNode;
+		[key: string]: unknown;
+	}) => (
 		<a href={href} {...props}>
 			{children}
 		</a>
@@ -13,9 +21,7 @@ vi.mock("next/link", () => ({
 
 describe("Pagination Component", () => {
 	it("should not render when totalPages is 1 or less", () => {
-		const { container } = render(
-			<Pagination currentPage={1} totalPages={1} />,
-		);
+		const { container } = render(<Pagination currentPage={1} totalPages={1} />);
 		expect(container.firstChild).toBe(null);
 
 		const { container: container2 } = render(
@@ -71,9 +77,7 @@ describe("Pagination Component", () => {
 	});
 
 	it("should use custom basePath when provided", () => {
-		render(
-			<Pagination currentPage={2} totalPages={3} basePath="/custom" />,
-		);
+		render(<Pagination currentPage={2} totalPages={3} basePath="/custom" />);
 
 		const page3Link = screen.getByText("3").closest("a");
 		expect(page3Link?.getAttribute("href")).toBe("/custom/3");

@@ -33,23 +33,30 @@ export default function RootLayout({
 					<header className="border-b border-gray-200 bg-white">
 						<div className="max-w-4xl mx-auto px-4 py-6">
 							<nav className="flex items-center justify-between">
-								<a href="/" className="text-xl font-semibold text-gray-900 no-underline hover:text-gray-700">
+								<a
+									href="/"
+									className="text-xl font-semibold text-gray-900 no-underline hover:text-gray-700"
+								>
 									TIL
 								</a>
 								<div className="flex space-x-6 text-sm">
-									<a href="/" className="text-gray-600 hover:text-gray-900 no-underline">
+									<a
+										href="/"
+										className="text-gray-600 hover:text-gray-900 no-underline"
+									>
 										Home
 									</a>
-									<a href="/archive" className="text-gray-600 hover:text-gray-900 no-underline">
+									<a
+										href="/archive"
+										className="text-gray-600 hover:text-gray-900 no-underline"
+									>
 										Archive
 									</a>
 								</div>
 							</nav>
 						</div>
 					</header>
-					<main className="max-w-4xl mx-auto px-4 py-8">
-						{children}
-					</main>
+					<main className="max-w-4xl mx-auto px-4 py-8">{children}</main>
 					<footer className="border-t border-gray-200 bg-white mt-16">
 						<div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
 							<p>A minimal collection of daily learnings</p>
