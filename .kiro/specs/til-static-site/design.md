@@ -103,22 +103,22 @@ interface MarkdownRendererProps {
 ```typescript
 // 页面组件 Props
 interface HomePageProps {
-  notes: TILEntry[]
+  notes: TIL[]
   currentPage: number
   totalPages: number
 }
 
 interface IndividualPageProps {
-  note: TILEntry
+  note: TIL
 }
 
 interface ArchivePageProps {
-  notes: TILEntry[]
+  notes: TIL[]
 }
 
 // 共享组件 Props
 interface TILCardProps {
-  note: TILEntry
+  note: TIL
   showFullContent?: boolean
 }
 
@@ -211,69 +211,41 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<ArchivePage
 ### TIL 条目模型
 
 ```typescript
-export interface TILEntry {
+export interface TIL {
   ulid: string
   title: string
   content: string // 原始 markdown 内容
   tags: string[]
 }
 
-export class TILEntryHelper {
-  static getUrl(ulid: string): string {
-    return `/${ulid}`
-  }
-  
-  // 从 ULID 提取时间戳
-  static getDate(ulid: string): Date {
-    return new Date(parseInt(ulid.substring(0, 10), 32))
-  }
-  
-  static getFormattedDate(ulid: string): string {
-    return TILEntryHelper.getDate(ulid).toISOString().split('T')[0]
-  }
-  
-  static getFilename(ulid: string): string {
-    return `${ulid}.md`
-  }
+// 直接使用 ulid 库进行时间操作
+import { decodeTime } from 'ulid'
+
+// 获取 ULID 时间: new Date(decodeTime(ulid))
+// 获取文件名: `${ulid}.md`
+// 获取 URL: `/${ulid}`
 }
 ```
 
 ### 分页模型
 
 ```typescript
+// 简单的分页类型
 export interface PaginationInfo {
   currentPage: number
   totalPages: number
-  itemsPerPage: number
-  totalItems: number
 }
 
-export class PaginationHelper {
-  static readonly ITEMS_PER_PAGE = 10
-  
-  static createPaginationInfo(totalItems: number, currentPage: number = 1): PaginationInfo {
-    const totalPages = Math.ceil(totalItems / PaginationHelper.ITEMS_PER_PAGE)
-    return {
-      currentPage,
-      totalPages,
-      itemsPerPage: PaginationHelper.ITEMS_PER_PAGE,
-      totalItems
-    }
-  }
-  
-  static hasNextPage(pagination: PaginationInfo): boolean {
-    return pagination.currentPage < pagination.totalPages
-  }
-  
-  static hasPreviousPage(pagination: PaginationInfo): boolean {
-    return pagination.currentPage > 1
-  }
-  
-  static getPageItems<T>(items: T[], pagination: PaginationInfo): T[] {
-    const start = (pagination.currentPage - 1) * pagination.itemsPerPage
-    const end = start + pagination.itemsPerPage
-    return items.slice(start, end)
-  }
+// 分页常量和工具函数
+export const ITEMS_PER_PAGE = 10
+
+export function getTotalPages(totalItems: number): number {
+  return Math.ceil(totalItems / ITEMS_PER_PAGE)
+}
+
+export function getPageItems<T>(items: T[], page: number): T[] {
+  const start = (page - 1) * ITEMS_PER_PAGE
+  return items.slice(start, start + ITEMS_PER_PAGE)
 }
 ```
 
@@ -463,9 +435,8 @@ til-pages/
 │   └── Icon.tsx               # Lucide React 图标组件
 ├── lib/
 │   ├── content-fetcher.ts     # 内容获取器
-│   ├── markdown-parser.ts     # Markdown 解析器
-│   ├── til-entry.ts           # TIL 条目模型
-│   └── pagination.ts          # 分页工具
+│   └── markdown-parser.ts     # Markdown 解析器
+├── types.ts                   # TIL 数据模型和分页工具
 ├── styles/
 │   └── globals.css            # 全局样式
 ├── tests/

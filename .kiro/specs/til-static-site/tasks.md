@@ -13,19 +13,21 @@
     - _需求: 4.3, 6.1, 6.4, 7.1_
 
 - [ ] 2. 核心数据模型和工具类
-  - [ ] 2.1 实现 TIL 条目模型和 ULID 辅助类
-    - 创建 src/lib/til-entry.ts 定义 TILEntry 接口
-    - 实现 TILEntryHelper 类使用 ulid 库
-    - 实现 ULID 时间戳提取和验证功能
+  - [x] 2.1 实现 TIL 数据模型
+    - 创建 src/types.ts 定义 TIL 接口
+    - 简洁的类型定义，不包含不必要的辅助函数
+    - 直接使用 ulid 库进行时间戳操作
     - _需求: 2.5, 5.3, 5.4_
 
-  - [ ]* 2.2 为 ULID 提取和时间戳解析编写属性测试
+  - [ ]* 2.2 为 ULID 时间戳解析编写属性测试
     - **属性 5: ULID 提取和时间戳解析**
     - **验证: 需求 2.5, 5.3, 5.4**
+    - 测试直接使用 ulid 库的 decodeTime 功能
 
-  - [ ] 2.3 实现分页工具类
-    - 创建 src/lib/pagination.ts 定义分页模型
-    - 实现 PaginationHelper 类处理分页逻辑
+  - [x] 2.3 实现分页 Page 类
+    - 在 src/types.ts 中创建 Page 类，包含 tils 和 pageNumber 属性
+    - 实现 fromAllTILs 静态方法从所有 TIL 创建指定页面
+    - 实现 getTotalPages 静态方法计算总页数（每页 10 个条目）
     - _需求: 1.3, 1.4_
 
   - [ ]* 2.4 为分页一致性编写属性测试
