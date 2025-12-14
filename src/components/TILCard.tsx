@@ -1,4 +1,5 @@
 import { decodeTime } from "ulid";
+import Link from "next/link";
 import type { TIL } from "../types";
 import MarkdownRenderer from "./MarkdownRenderer";
 
@@ -37,7 +38,12 @@ export default function TILCard({
 			{/* Header with title and date */}
 			<header className="mb-4">
 				<h2 className="text-xl font-semibold text-gray-900 mb-2">
-					{til.title}
+					<Link
+						href={`/til/${til.ulid.toLowerCase()}`}
+						className="hover:text-blue-600 transition-colors duration-200"
+					>
+						{til.title}
+					</Link>
 				</h2>
 				<time
 					dateTime={createdAt.toISOString()}
