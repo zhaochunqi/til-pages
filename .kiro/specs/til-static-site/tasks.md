@@ -1,12 +1,12 @@
 # 实施计划
 
-- [ ] 1. 项目依赖和配置
-  - [ ] 1.1 安装 ULID 库和配置 pnpm
+- [x] 1. 项目依赖和配置
+  - [x] 1.1 安装 ULID 库和配置 pnpm
     - 使用 pnpm 安装 ulid 库
     - 配置 package.json 脚本
     - _需求: 2.5, 5.3_
 
-  - [ ] 1.2 配置 Next.js 静态导出和 Tailwind CSS
+  - [x] 1.2 配置 Next.js 静态导出和 Tailwind CSS
     - 更新 next.config.ts 支持静态导出
     - 配置 Tailwind CSS 极简主题
     - 更新全局样式
