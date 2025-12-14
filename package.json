@@ -1,44 +1,44 @@
 {
-  "name": "til-pages",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "export": "next build && next export",
-    "start": "next start",
-    "lint": "eslint",
-    "test": "vitest --run",
-    "test:watch": "vitest",
-    "test:property": "vitest --run --grep=\"Property\""
-  },
-  "dependencies": {
-    "gray-matter": "^4.0.3",
-    "lucide-react": "^0.561.0",
-    "next": "16.0.10",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
-    "react-markdown": "^10.1.0",
-    "rehype-highlight": "^7.0.2",
-    "remark-gfm": "^4.0.1",
-    "ulid": "^3.0.2",
-    "zod": "^4.1.13"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/react": "^16.3.0",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^5.1.2",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.10",
-    "fast-check": "^4.4.0",
-    "jsdom": "^27.3.0",
-    "tailwindcss": "^4",
-    "typescript": "^5",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.15"
-  }
+	"name": "til-pages",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"export": "next build && next export",
+		"start": "next start",
+		"lint": "eslint",
+		"test": "vitest --run",
+		"test:watch": "vitest",
+		"test:property": "vitest --run --grep=\"Property\""
+	},
+	"dependencies": {
+		"gray-matter": "^4.0.3",
+		"lucide-react": "^0.561.0",
+		"next": "16.0.10",
+		"react": "19.2.1",
+		"react-dom": "19.2.1",
+		"react-markdown": "^10.1.0",
+		"rehype-highlight": "^7.0.2",
+		"remark-gfm": "^4.0.1",
+		"ulid": "^3.0.2",
+		"zod": "^4.1.13"
+	},
+	"devDependencies": {
+		"@tailwindcss/postcss": "^4",
+		"@testing-library/dom": "^10.4.1",
+		"@testing-library/react": "^16.3.0",
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"@vitejs/plugin-react": "^5.1.2",
+		"eslint": "^9",
+		"eslint-config-next": "16.0.10",
+		"fast-check": "^4.4.0",
+		"jsdom": "^27.3.0",
+		"tailwindcss": "^4",
+		"typescript": "^5",
+		"vite-tsconfig-paths": "^5.1.4",
+		"vitest": "^4.0.15"
+	}
 }
