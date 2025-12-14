@@ -14,6 +14,8 @@
 - **首页**: 显示最新 TIL 条目的主索引页面
 - **独立页面**: 通过 ULID URL 访问的每个 TIL 条目的专用页面
 - **归档页面**: 仅列出所有 TIL 条目标题和链接的页面
+- **React组件**: 用于构建用户界面的 React 函数组件
+- **react-markdown**: 用于将 markdown 内容渲染为 React 组件的库
 
 ## 需求
 
@@ -23,11 +25,11 @@
 
 #### 验收标准
 
-1. 当访问者访问首页时，TIL系统应显示最新的 10 个 TIL 条目
-2. 当首页显示条目时，TIL系统应显示每个条目的完整内容而不截断
-3. 当条目超过 10 个时，TIL系统应提供分页控件来在页面间导航
-4. 当使用分页时，TIL系统应始终保持每页 10 个条目
-5. 当显示条目时，TIL系统应按创建日期排序，最新的在前
+1. WHEN 访问者访问首页 THEN TIL系统 SHALL 显示最新的 10 个 TIL 条目
+2. WHEN 首页显示条目 THEN TIL系统 SHALL 显示每个条目的完整内容而不截断
+3. WHEN 条目超过 10 个 THEN TIL系统 SHALL 提供分页控件来在页面间导航
+4. WHEN 使用分页 THEN TIL系统 SHALL 始终保持每页 10 个条目
+5. WHEN 显示条目 THEN TIL系统 SHALL 按创建日期排序，最新的在前
 
 ### 需求 2
 
@@ -35,11 +37,11 @@
 
 #### 验收标准
 
-1. 当 TIL 条目存在于 Notes目录 中时，TIL系统应生成可通过 URL 模式 /[ULID] 访问的页面
-2. 当访问独立页面时，TIL系统应显示完整的 TIL 内容而不截断
-3. 当 ULID 对应现有 TIL 条目时，TIL系统应提供相应的内容页面
-4. 当 ULID 不对应任何 TIL 条目时，TIL系统应返回 404 错误页面
-5. 当生成独立页面时，TIL系统应从 Notes目录 中的文件名提取 ULID
+1. WHEN TIL 条目存在于 Notes目录 中 THEN TIL系统 SHALL 生成可通过 URL 模式 /[ULID] 访问的页面
+2. WHEN 访问独立页面 THEN TIL系统 SHALL 显示完整的 TIL 内容而不截断
+3. WHEN ULID 对应现有 TIL 条目 THEN TIL系统 SHALL 提供相应的内容页面
+4. IF ULID 不对应任何 TIL 条目 THEN TIL系统 SHALL 返回 404 错误页面
+5. WHEN 生成独立页面 THEN TIL系统 SHALL 从 Notes目录 中的文件名提取 ULID
 
 ### 需求 3
 
@@ -47,11 +49,11 @@
 
 #### 验收标准
 
-1. 当访问者访问归档页面时，TIL系统应将所有 TIL 条目显示为标题-链接对
-2. 当显示归档条目时，TIL系统应仅显示每个条目的标题和可点击链接
-3. 当点击归档链接时，TIL系统应导航到相应的独立页面
-4. 当归档页面加载时，TIL系统应按时间顺序排序，最新的在前
-5. 当添加新 TIL 条目时，TIL系统应自动将其包含在归档页面中
+1. WHEN 访问者访问归档页面 THEN TIL系统 SHALL 将所有 TIL 条目显示为标题-链接对
+2. WHEN 显示归档条目 THEN TIL系统 SHALL 仅显示每个条目的标题和可点击链接
+3. WHEN 点击归档链接 THEN TIL系统 SHALL 导航到相应的独立页面
+4. WHEN 归档页面加载 THEN TIL系统 SHALL 按时间顺序排序，最新的在前
+5. WHEN 添加新 TIL 条目 THEN TIL系统 SHALL 自动将其包含在归档页面中
 
 ### 需求 4
 
@@ -59,11 +61,11 @@
 
 #### 验收标准
 
-1. 当源仓库中的内容更新时，源仓库应触发目标仓库中的构建
-2. 当触发构建时，TIL系统应从源仓库获取最新内容
-3. 当获取内容时，TIL系统应使用更新的内容重新生成所有静态页面
-4. 当重新生成完成时，TIL系统应自动部署更新的站点
-5. 当构建过程失败时，TIL系统应维护之前的工作版本
+1. WHEN 源仓库中的内容更新 THEN 源仓库 SHALL 触发目标仓库中的构建
+2. WHEN 触发构建 THEN TIL系统 SHALL 从源仓库获取最新内容
+3. WHEN 获取内容 THEN TIL系统 SHALL 使用更新的内容重新生成所有静态页面
+4. WHEN 重新生成完成 THEN TIL系统 SHALL 自动部署更新的站点
+5. IF 构建过程失败 THEN TIL系统 SHALL 维护之前的工作版本
 
 ### 需求 5
 
@@ -71,11 +73,11 @@
 
 #### 验收标准
 
-1. 当 TIL 文件存在于 Notes目录 中时，TIL系统应完全解析每个 markdown 文件
-2. 当解析 markdown 文件时，TIL系统应将 markdown 语法转换为适当的 HTML 元素
-3. 当提取文件信息时，TIL系统应使用文件名作为 ULID 标识符的来源
-4. 当处理文件元数据时，TIL系统应提取创建日期以进行正确的时间排序
-5. 当 markdown 解析遇到错误时，TIL系统应记录错误并跳过有问题的文件
+1. WHEN TIL 文件存在于 Notes目录 中 THEN TIL系统 SHALL 完全解析每个 markdown 文件
+2. WHEN 解析 markdown 文件 THEN TIL系统 SHALL 将 markdown 语法转换为适当的 HTML 元素
+3. WHEN 提取文件信息 THEN TIL系统 SHALL 使用文件名作为 ULID 标识符的来源
+4. WHEN 处理文件元数据 THEN TIL系统 SHALL 提取创建日期以进行正确的时间排序
+5. IF markdown 解析遇到错误 THEN TIL系统 SHALL 记录错误并跳过有问题的文件
 
 ### 需求 6
 
@@ -83,8 +85,20 @@
 
 #### 验收标准
 
-1. 当任何页面加载时，TIL系统应应用具有清洁排版的极简视觉设计
-2. 当显示内容时，TIL系统应使用充足的空白和可读的字体大小
-3. 当存在导航元素时，TIL系统应保持其简单和不突兀
-4. 当页面渲染时，TIL系统应确保使用最少的 CSS 和 JavaScript 实现快速加载
-5. 当在不同设备上查看时，TIL系统应在各种屏幕尺寸上保持可读性
+1. WHEN 任何页面加载 THEN TIL系统 SHALL 应用具有清洁排版的极简视觉设计
+2. WHEN 显示内容 THEN TIL系统 SHALL 使用充足的空白和可读的字体大小
+3. WHEN 存在导航元素 THEN TIL系统 SHALL 保持其简单和不突兀
+4. WHEN 页面渲染 THEN TIL系统 SHALL 确保使用最少的 CSS 和 JavaScript 实现快速加载
+5. WHEN 在不同设备上查看 THEN TIL系统 SHALL 在各种屏幕尺寸上保持可读性
+
+### 需求 7
+
+**用户故事:** 作为开发者，我希望使用 React 和 react-markdown 构建系统，以便简化 markdown 内容的渲染和组件开发。
+
+#### 验收标准
+
+1. WHEN 构建系统 THEN TIL系统 SHALL 使用 React 作为主要的 UI 框架
+2. WHEN 渲染 markdown 内容 THEN TIL系统 SHALL 使用 react-markdown 库进行转换
+3. WHEN 创建页面组件 THEN TIL系统 SHALL 使用 React 函数组件架构
+4. WHEN 处理 markdown 语法 THEN react-markdown SHALL 支持标准 markdown 语法和扩展
+5. WHEN 集成组件 THEN TIL系统 SHALL 确保 React组件 与 react-markdown 无缝协作

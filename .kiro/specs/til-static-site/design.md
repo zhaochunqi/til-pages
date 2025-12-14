@@ -2,7 +2,7 @@
 
 ## 概述
 
-TIL 静态站点生成系统是一个基于 Node.js 的静态站点生成器，专门为处理 TIL (Today I Learned) 内容而设计。系统从源 GitHub 仓库获取 markdown 文件，解析其内容和元数据，然后生成极简的静态 HTML 页面。
+TIL 静态站点生成系统是一个基于 React 的静态站点生成器，专门为处理 TIL (Today I Learned) 内容而设计。系统从源 GitHub 仓库获取 markdown 文件，使用 react-markdown 解析其内容和元数据，然后生成极简的静态 HTML 页面。
 
 核心特性包括：
 - 分页首页显示最新 TIL 条目
@@ -35,11 +35,11 @@ graph TD
 
 ### 技术栈选择
 
-- **框架**: Astro 静态站点生成器
-- **UI 组件**: Astro 组件 (可选集成 React/Vue/Svelte)
-- **Markdown 解析**: Astro 内置 Markdown 支持 + remark 插件
+- **框架**: Next.js 静态站点生成器 (React 框架)
+- **UI 组件**: React 函数组件
+- **Markdown 解析**: react-markdown + remark 插件
 - **样式**: Tailwind CSS 实现极简设计
-- **图标**: Lucide 图标库
+- **图标**: Lucide React 图标库
 - **类型安全**: TypeScript
 - **部署**: GitHub Actions + GitHub Pages
 - **触发机制**: Repository Dispatch 或 Webhook
@@ -65,19 +65,19 @@ interface RawNote {
 
 ### 2. Markdown 解析器 (MarkdownParser)
 
-解析 markdown 文件并提取元数据：
+解析 markdown 文件并提取元数据，配合 react-markdown 使用：
 
 ```typescript
 interface MarkdownParser {
   parse(content: string): ParsedNote
   extractFrontMatter(content: string): FrontMatter
-  renderToHtml(markdown: string): Promise<string>
+  // react-markdown 直接处理渲染，不需要 renderToHtml 方法
 }
 
 interface ParsedNote {
   ulid: string
   title: string
-  content: string // 原始 markdown 内容
+  content: string // 原始 markdown 内容，将传递给 react-markdown
   tags: string[]
   frontMatter: FrontMatter
   // date 从 ULID 中提取，不需要单独存储
@@ -88,11 +88,17 @@ interface FrontMatter {
   tags: string[]
   date: string
 }
+
+// React Markdown 组件 Props
+interface MarkdownRendererProps {
+  content: string
+  className?: string
+}
 ```
 
-### 3. Astro 组件架构
+### 3. React 组件架构
 
-使用 Astro 组件构建页面：
+使用 React 函数组件构建页面：
 
 ```typescript
 // 页面组件 Props
@@ -122,48 +128,81 @@ interface PaginationProps {
   basePath: string
 }
 
-// 图标组件 Props
+// Markdown 渲染组件 Props
+interface MarkdownRendererProps {
+  content: string
+  className?: string
+}
+
+// 图标组件 Props (使用 Lucide React)
 interface IconProps {
-  name: string // Lucide 图标名称
+  name: string // Lucide React 图标名称
   size?: number
   className?: string
 }
 ```
 
-### 4. Astro 静态生成
+### 4. Next.js 静态生成
 
-使用 Astro 的静态生成功能：
+使用 Next.js 的静态生成功能：
 
 ```typescript
-// src/pages/index.astro - 首页
-export async function getStaticPaths() {
+// pages/index.tsx - 首页
+export async function getStaticProps(): Promise<GetStaticPropsResult<HomePageProps>> {
   const notes = await getAllNotes()
-  return [{ params: {}, props: { notes, currentPage: 1, totalPages: Math.ceil(notes.length / 10) } }]
+  return {
+    props: {
+      notes,
+      currentPage: 1,
+      totalPages: Math.ceil(notes.length / 10)
+    }
+  }
 }
 
-// src/pages/page/[page].astro - 分页
-export async function getStaticPaths() {
+// pages/page/[page].tsx - 分页
+export async function getStaticPaths(): Promise<GetStaticPathsResult> {
   const notes = await getAllNotes()
   const totalPages = Math.ceil(notes.length / 10)
-  return Array.from({ length: totalPages }, (_, i) => ({
-    params: { page: (i + 1).toString() },
-    props: { notes, currentPage: i + 1, totalPages }
+  const paths = Array.from({ length: totalPages }, (_, i) => ({
+    params: { page: (i + 1).toString() }
   }))
+  return { paths, fallback: false }
 }
 
-// src/pages/[ulid].astro - 独立页面
-export async function getStaticPaths() {
+export async function getStaticProps({ params }: GetStaticPropsContext): Promise<GetStaticPropsResult<HomePageProps>> {
   const notes = await getAllNotes()
-  return notes.map(note => ({
-    params: { ulid: note.ulid },
-    props: { note }
-  }))
+  const currentPage = parseInt(params?.page as string) || 1
+  return {
+    props: {
+      notes,
+      currentPage,
+      totalPages: Math.ceil(notes.length / 10)
+    }
+  }
 }
 
-// src/pages/archive.astro - 归档页面
-export async function getStaticPaths() {
+// pages/[ulid].tsx - 独立页面
+export async function getStaticPaths(): Promise<GetStaticPathsResult> {
   const notes = await getAllNotes()
-  return [{ params: {}, props: { notes } }]
+  const paths = notes.map(note => ({
+    params: { ulid: note.ulid }
+  }))
+  return { paths, fallback: false }
+}
+
+export async function getStaticProps({ params }: GetStaticPropsContext): Promise<GetStaticPropsResult<IndividualPageProps>> {
+  const notes = await getAllNotes()
+  const note = notes.find(n => n.ulid === params?.ulid)
+  if (!note) {
+    return { notFound: true }
+  }
+  return { props: { note } }
+}
+
+// pages/archive.tsx - 归档页面
+export async function getStaticProps(): Promise<GetStaticPropsResult<ArchivePageProps>> {
+  const notes = await getAllNotes()
+  return { props: { notes } }
 }
 ```
 
@@ -280,6 +319,10 @@ export class PaginationHelper {
 *对于任何* 生成的页面，应该包含最少的外部 CSS 和 JavaScript 资源
 **验证: 需求 6.4**
 
+**属性 10: React Markdown 渲染一致性**
+*对于任何* markdown 内容，使用 react-markdown 渲染的结果应该与标准 markdown 规范保持一致
+**验证: 需求 7.2, 7.4**
+
 ## 错误处理
 
 ### 文件解析错误
@@ -312,8 +355,9 @@ export class PaginationHelper {
 **基于属性的测试**覆盖：
 - 使用 **fast-check** 库进行属性测试
 - 每个属性测试运行最少 100 次迭代
-- 验证上述 9 个正确性属性
+- 验证上述 10 个正确性属性
 - 生成随机的 TIL 内容、日期和 ULID 进行测试
+- 测试 react-markdown 渲染的一致性和正确性
 
 **测试标记要求**：
 - 每个基于属性的测试必须使用注释标记对应的设计文档属性
@@ -403,35 +447,35 @@ jobs:
 
 ```
 til-pages/
-├── src/
-│   ├── pages/
-│   │   ├── index.astro        # 首页 (第一页)
-│   │   ├── page/
-│   │   │   └── [page].astro   # 分页页面
-│   │   ├── [ulid].astro       # 独立 TIL 页面
-│   │   ├── archive.astro      # 归档页面
-│   │   └── 404.astro          # 404 页面
-│   ├── components/
-│   │   ├── TILCard.astro      # TIL 卡片组件
-│   │   ├── Pagination.astro   # 分页组件
-│   │   ├── Layout.astro       # 布局组件
-│   │   ├── ArchiveItem.astro  # 归档项组件
-│   │   └── Icon.astro         # Lucide 图标组件
-│   ├── lib/
-│   │   ├── content-fetcher.ts # 内容获取器
-│   │   ├── markdown-parser.ts # Markdown 解析器
-│   │   ├── til-entry.ts       # TIL 条目模型
-│   │   └── pagination.ts      # 分页工具
-│   └── styles/
-│       └── global.css         # 全局样式
+├── pages/
+│   ├── index.tsx              # 首页 (第一页)
+│   ├── page/
+│   │   └── [page].tsx         # 分页页面
+│   ├── [ulid].tsx             # 独立 TIL 页面
+│   ├── archive.tsx            # 归档页面
+│   └── 404.tsx                # 404 页面
+├── components/
+│   ├── TILCard.tsx            # TIL 卡片组件
+│   ├── Pagination.tsx         # 分页组件
+│   ├── Layout.tsx             # 布局组件
+│   ├── ArchiveItem.tsx        # 归档项组件
+│   ├── MarkdownRenderer.tsx   # react-markdown 渲染组件
+│   └── Icon.tsx               # Lucide React 图标组件
+├── lib/
+│   ├── content-fetcher.ts     # 内容获取器
+│   ├── markdown-parser.ts     # Markdown 解析器
+│   ├── til-entry.ts           # TIL 条目模型
+│   └── pagination.ts          # 分页工具
+├── styles/
+│   └── globals.css            # 全局样式
 ├── tests/
 │   ├── unit/
 │   └── property/
-├── dist/ (Astro 构建输出)
+├── out/ (Next.js 静态导出输出)
 ├── source/ (克隆的源仓库)
 ├── package.json
-├── astro.config.mjs
-├── tailwind.config.mjs
+├── next.config.js
+├── tailwind.config.js
 ├── tsconfig.json
 └── .github/workflows/
     └── build-deploy.yml

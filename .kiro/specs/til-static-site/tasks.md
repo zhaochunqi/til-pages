@@ -1,42 +1,46 @@
 # 实施计划
 
 - [ ] 1. 快速原型 - 项目初始化和本地内容
-  - 创建 Astro 项目结构
-  - 配置 TypeScript、Tailwind CSS 和 Lucide 图标
+  - 创建 Next.js 项目结构
+  - 配置 TypeScript、Tailwind CSS 和 Lucide React 图标
   - 本地 clone TIL 仓库到 `source` 子文件夹进行开发
-  - 创建基本的 markdown 解析和渲染功能
-  - _需求: 6.1, 6.4, 5.1, 5.2_
+  - 安装和配置 react-markdown 及相关插件
+  - _需求: 6.1, 6.4, 5.1, 5.2, 7.1_
 
 - [ ] 2. 最小可行页面 - 立即看到效果
   - [ ] 2.1 创建基础布局和首页
-    - 实现 Layout.astro 和 index.astro
+    - 实现 Layout.tsx 和 pages/index.tsx
     - 从本地 source 文件夹读取 TIL 文件
     - 显示第一个 TIL 条目的渲染效果
-    - _需求: 1.1, 1.2, 5.2_
+    - _需求: 1.1, 1.2, 5.2, 7.3_
 
   - [ ] 2.2 实现 TIL 条目模型和辅助类
     - 创建 TILEntry 接口和 TILEntryHelper 类
     - 实现 ULID 时间戳提取功能
     - _需求: 2.5, 5.3_
 
-  - [ ] 2.3 创建简单的 TIL 卡片组件
-    - 实现 TILCard.astro 显示 markdown 内容
+  - [ ] 2.3 创建 MarkdownRenderer 和 TIL 卡片组件
+    - 实现 MarkdownRenderer.tsx 使用 react-markdown
+    - 实现 TILCard.tsx 显示 markdown 内容
     - 集成 Tailwind CSS 基础样式
-    - _需求: 1.2, 6.1_
+    - _需求: 1.2, 6.1, 7.2, 7.4_
 
 - [ ] 3. 扩展功能 - 完整页面支持
   - [ ] 3.1 实现独立 TIL 页面
-    - 创建 [ulid].astro 显示单个条目
-    - _需求: 2.1, 2.2_
+    - 创建 pages/[ulid].tsx 显示单个条目
+    - 实现 getStaticPaths 和 getStaticProps
+    - _需求: 2.1, 2.2, 7.3_
 
   - [ ] 3.2 添加分页功能
-    - 实现分页模型和 Pagination 组件
-    - 创建 page/[page].astro
-    - _需求: 1.3, 1.4_
+    - 实现分页模型和 Pagination.tsx 组件
+    - 创建 pages/page/[page].tsx
+    - 实现 Next.js 动态路由和静态生成
+    - _需求: 1.3, 1.4, 7.3_
 
   - [ ] 3.3 创建归档页面
-    - 实现 archive.astro 显示所有条目列表
-    - _需求: 3.1, 3.2_
+    - 实现 pages/archive.tsx 显示所有条目列表
+    - 创建 ArchiveItem.tsx 组件
+    - _需求: 3.1, 3.2, 7.3_
 
 - [ ] 4. 内容获取和解析系统
   - [ ] 4.1 实现内容获取器
@@ -48,14 +52,19 @@
     - **属性 8: 内容获取完整性**
     - **验证: 需求 4.2, 5.1**
 
-  - [ ] 4.3 完善 Markdown 解析器
+  - [ ] 4.3 完善 Markdown 解析器和 react-markdown 集成
     - 创建 MarkdownParser 类解析 front matter
+    - 配置 react-markdown 插件和自定义组件
     - 处理各种 markdown 语法
-    - _需求: 5.2, 5.5_
+    - _需求: 5.2, 5.5, 7.2, 7.4_
 
   - [ ]* 4.4 为 Markdown 解析往返编写属性测试
     - **属性 7: Markdown 解析往返**
     - **验证: 需求 5.2**
+
+  - [ ]* 4.5 为 React Markdown 渲染一致性编写属性测试
+    - **属性 10: React Markdown 渲染一致性**
+    - **验证: 需求 7.2, 7.4**
 
 - [ ] 5. 检查点 - 确保所有测试通过
   - 确保所有测试通过，如有问题请询问用户
@@ -87,17 +96,18 @@
 
 - [ ] 7. 完善功能和样式
   - [ ] 7.1 创建图标组件和导航
-    - 实现 Icon.astro 组件集成 Lucide 图标
+    - 实现 Icon.tsx 组件集成 Lucide React 图标
     - 添加页面间导航链接
-    - _需求: 6.3_
+    - _需求: 6.3, 7.5_
 
   - [ ] 7.2 实现 404 错误页面
-    - 创建 404.astro 处理不存在的 ULID
+    - 创建 pages/404.tsx 处理不存在的 ULID
     - _需求: 2.4_
 
   - [ ] 7.3 完善极简设计样式
     - 优化 Tailwind CSS 配置和主题
     - 确保响应式设计
+    - 配置 Next.js 全局样式
     - _需求: 6.1, 6.2, 6.5_
 
   - [ ]* 7.4 为资源最小化编写属性测试
@@ -105,14 +115,16 @@
     - **验证: 需求 6.4**
 
 - [ ] 8. 构建和部署配置
-  - [ ] 8.1 配置 Astro 构建
-    - 设置静态站点生成配置
+  - [ ] 8.1 配置 Next.js 静态导出
+    - 设置 next.config.js 静态导出配置
     - 配置输出目录和路由
-    - _需求: 4.3_
+    - 确保所有页面都能静态生成
+    - _需求: 4.3, 7.1_
 
   - [ ] 8.2 创建 GitHub Actions 工作流
     - 实现自动构建和部署流程
     - 配置源仓库内容获取
+    - 配置 Next.js 构建和静态导出
     - _需求: 4.1, 4.4_
 
   - [ ] 8.3 设置错误处理和回退机制

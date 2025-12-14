@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "name": "Library Check Reminder",
+  "description": "Reminds developers to search for existing libraries before implementing complex functionality from scratch",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.py",
+      "**/*.js",
+      "**/*.ts",
+      "**/*.java",
+      "**/*.cpp",
+      "**/*.c",
+      "**/*.go",
+      "**/*.rs",
+      "**/*.rb",
+      "**/*.php"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Before implementing this functionality, have you checked if there are well-known libraries that could handle this task? Consider searching for existing solutions on package repositories (PyPI, npm, Maven Central, etc.) or popular GitHub repositories. Popular libraries are often more reliable, well-tested, and maintained than custom implementations. What libraries have you considered for this functionality?"
+  }
+}
