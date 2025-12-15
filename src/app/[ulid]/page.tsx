@@ -59,9 +59,9 @@ export async function generateStaticParams() {
 	try {
 		const allTILs = await getAllTILs();
 
-		// Generate params for each ULID
+		// Generate params for each ULID (lowercase for URLs)
 		return allTILs.map((til) => ({
-			ulid: til.ulid,
+			ulid: til.ulid.toLowerCase(),
 		}));
 	} catch (error) {
 		console.error("Error generating static params for ULID routes:", error);
@@ -84,7 +84,10 @@ export default async function IndividualTILPage({
 }: IndividualPageProps) {
 	// Await params since it's a Promise in Next.js 15+
 	const resolvedParams = await params;
-	const { ulid } = resolvedParams;
+	const { ulid: urlUlid } = resolvedParams;
+
+	// Convert URL ULID (lowercase) to uppercase for validation and lookup
+	const ulid = urlUlid.toUpperCase();
 
 	// Validate ULID format first
 	if (!isValidULID(ulid)) {
@@ -139,7 +142,7 @@ export default async function IndividualTILPage({
 							{formattedDate}
 						</time>
 						<div className="text-xs text-gray-400 font-mono">
-							ID: {til.ulid}
+							id: {til.ulid}
 						</div>
 					</div>
 				</header>

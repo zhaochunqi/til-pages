@@ -58,21 +58,28 @@ export default function MarkdownRenderer({
 						</blockquote>
 					),
 					code: (props) => {
-						const { children, className, ...rest } = props;
-						const isInline = !className || !className.includes("language-");
-						if (isInline) {
+						const { children, className, node, ...rest } = props;
+						// Check if this is a code block (has a parent pre element) or inline code
+						const isCodeBlock = node?.tagName === 'code' && 
+							className && 
+							typeof className === 'string' && 
+							className.includes('language-');
+						
+						if (isCodeBlock) {
 							return (
 								<code
-									className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono text-gray-800"
+									className={`block bg-gray-50 p-4 rounded-lg overflow-x-auto text-sm font-mono ${className || ""}`}
 									{...rest}
 								>
 									{children}
 								</code>
 							);
 						}
+						
+						// Inline code
 						return (
 							<code
-								className={`block bg-gray-50 p-4 rounded-lg overflow-x-auto text-sm font-mono ${className || ""}`}
+								className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono text-gray-800"
 								{...rest}
 							>
 								{children}

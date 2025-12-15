@@ -21,7 +21,7 @@ export default function ArchiveItem({ til, className = "" }: ArchiveItemProps) {
 			`.trim()}
 		>
 			<Link
-				href={`/${til.ulid}`}
+				href={`/${til.ulid.toLowerCase()}`}
 				className="
 					block text-gray-900 hover:text-blue-600
 					transition-colors duration-150
