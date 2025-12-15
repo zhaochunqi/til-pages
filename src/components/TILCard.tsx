@@ -1,5 +1,6 @@
 import { decodeTime } from "ulid";
 import Link from "next/link";
+import { Calendar, ExternalLink } from "lucide-react";
 import type { TIL } from "../types";
 import MarkdownRenderer from "./MarkdownRenderer";
 
@@ -40,17 +41,18 @@ export default function TILCard({
 				<h2 className="text-xl font-semibold text-gray-900 mb-2">
 					<Link
 						href={`/${til.ulid.toLowerCase()}`}
-						className="hover:text-blue-600 transition-colors duration-200"
+						className="hover:text-blue-600 transition-colors duration-200 group flex items-center space-x-1"
 					>
-						{til.title}
+						<span>{til.title}</span>
+						<ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
 					</Link>
 				</h2>
-				<time
-					dateTime={createdAt.toISOString()}
-					className="text-sm text-gray-500"
-				>
-					{formattedDate}
-				</time>
+				<div className="flex items-center space-x-1 text-sm text-gray-500">
+					<Calendar size={12} />
+					<time dateTime={createdAt.toISOString()}>
+						{formattedDate}
+					</time>
+				</div>
 			</header>
 
 			{/* Content */}

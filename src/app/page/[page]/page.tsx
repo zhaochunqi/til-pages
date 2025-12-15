@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
 import { decodeTime } from "ulid";
+import Link from "next/link";
+import { Archive, Calendar, BookOpen, Home } from "lucide-react";
 import Pagination from "../../../components/Pagination";
 import TILCard from "../../../components/TILCard";
+import { Breadcrumb } from "../../../components/Navigation";
 import { contentFetcher } from "../../../lib/content-fetcher";
 import { MarkdownParser } from "../../../lib/markdown-parser";
 import { Page, type TIL } from "../../../types";
@@ -107,14 +110,35 @@ export default async function PaginationPage({ params }: PageProps) {
 
 	return (
 		<div className="space-y-8">
+			{/* Breadcrumb Navigation */}
+			<Breadcrumb
+				items={[
+					{ label: "Home", href: "/", icon: <Home size={12} /> },
+					{ label: `Page ${pageNumber}`, icon: <Calendar size={12} /> },
+				]}
+			/>
+
 			{/* Page Header */}
 			<div className="text-center">
-				<h1 className="text-3xl font-bold text-gray-900 mb-2">
-					Today I Learned
-				</h1>
-				<p className="text-gray-600">
-					A collection of things I learn every day - Page {pageNumber}
+				<div className="flex items-baseline justify-center space-x-3 mb-2">
+					<BookOpen size={28} className="text-gray-700" />
+					<h1 className="text-3xl font-bold text-gray-900">
+						Today I Learned
+					</h1>
+				</div>
+				<p className="text-gray-600 flex items-center justify-center space-x-1">
+					<Calendar size={14} />
+					<span>A collection of things I learn every day - Page {pageNumber}</span>
 				</p>
+				<div className="mt-4">
+					<Link
+						href="/archive"
+						className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+					>
+						<Archive size={14} />
+						<span>View all {allTILs.length} entries</span>
+					</Link>
+				</div>
 			</div>
 
 			{/* TIL Entries */}

@@ -1,7 +1,8 @@
 import { decodeTime } from "ulid";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { Home, Archive, Calendar } from "lucide-react";
 import ArchiveItem from "../../components/ArchiveItem";
+import { Breadcrumb } from "../../components/Navigation";
 import { contentFetcher } from "../../lib/content-fetcher";
 import { MarkdownParser } from "../../lib/markdown-parser";
 import type { TIL } from "../../types";
@@ -59,22 +60,23 @@ export default async function ArchivePage() {
 
 	return (
 		<div className="space-y-8">
-			{/* Navigation */}
-			<nav className="flex items-center space-x-2 text-sm">
-				<Link
-					href="/"
-					className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors"
-				>
-					<ChevronLeft size={16} />
-					<span>Back to Home</span>
-				</Link>
-			</nav>
+			{/* Breadcrumb Navigation */}
+			<Breadcrumb
+				items={[
+					{ label: "Home", href: "/", icon: <Home size={12} /> },
+					{ label: "Archive", icon: <Archive size={12} /> },
+				]}
+			/>
 
 			{/* Page Header */}
 			<div className="text-center">
-				<h1 className="text-3xl font-bold text-gray-900 mb-2">Archive</h1>
-				<p className="text-gray-600">
-					All {allTILs.length} TIL entries, sorted by date
+				<div className="flex items-baseline justify-center space-x-3 mb-2">
+					<Archive size={28} className="text-gray-700" />
+					<h1 className="text-3xl font-bold text-gray-900">Archive</h1>
+				</div>
+				<p className="text-gray-600 flex items-center justify-center space-x-1">
+					<Calendar size={14} />
+					<span>All {allTILs.length} TIL entries, sorted by date</span>
 				</p>
 			</div>
 
@@ -101,9 +103,10 @@ export default async function ArchivePage() {
 			<div className="flex justify-center">
 				<Link
 					href="/"
-					className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
+					className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors text-sm"
 				>
-					← Back to latest entries
+					<Home size={14} />
+					<span>Back to latest entries</span>
 				</Link>
 			</div>
 		</div>

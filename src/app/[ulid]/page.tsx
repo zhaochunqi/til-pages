@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import { decodeTime, isValid as isValidULID } from "ulid";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Archive, Calendar, Tag } from "lucide-react";
 import MarkdownRenderer from "../../components/MarkdownRenderer";
+import { Breadcrumb } from "../../components/Navigation";
 import { contentFetcher } from "../../lib/content-fetcher";
 import { MarkdownParser } from "../../lib/markdown-parser";
 import type { TIL } from "../../types";
@@ -105,6 +106,11 @@ export default async function IndividualTILPage({
 		notFound();
 	}
 
+	// Find previous and next entries for navigation
+	const currentIndex = allTILs.findIndex((t) => t.ulid === ulid);
+	const previousTIL = currentIndex < allTILs.length - 1 ? allTILs[currentIndex + 1] : null;
+	const nextTIL = currentIndex > 0 ? allTILs[currentIndex - 1] : null;
+
 	// Extract timestamp from ULID for display
 	const createdAt = new Date(decodeTime(til.ulid));
 	const formattedDate = createdAt.toLocaleDateString("en-US", {
@@ -116,16 +122,13 @@ export default async function IndividualTILPage({
 
 	return (
 		<div className="space-y-8">
-			{/* Navigation */}
-			<nav className="flex items-center space-x-2 text-sm">
-				<Link
-					href="/"
-					className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors"
-				>
-					<ChevronLeft size={16} />
-					<span>Back to Home</span>
-				</Link>
-			</nav>
+			{/* Breadcrumb Navigation */}
+			<Breadcrumb
+				items={[
+					{ label: "Home", href: "/", icon: <Home size={12} /> },
+					{ label: til.title, icon: <Calendar size={12} /> },
+				]}
+			/>
 
 			{/* Article */}
 			<article className="bg-white border border-gray-200 rounded-lg p-8">
@@ -158,8 +161,11 @@ export default async function IndividualTILPage({
 				{/* Tags */}
 				{til.tags.length > 0 && (
 					<footer className="pt-6 border-t border-gray-100">
-						<div className="flex flex-wrap gap-2">
-							<span className="text-sm text-gray-500 mr-2">Tags:</span>
+						<div className="flex flex-wrap gap-2 items-center">
+							<div className="flex items-center space-x-1 text-sm text-gray-500 mr-2">
+								<Tag size={14} />
+								<span>Tags:</span>
+							</div>
 							{til.tags.map((tag) => (
 								<span
 									key={tag}
@@ -177,13 +183,55 @@ export default async function IndividualTILPage({
 				)}
 			</article>
 
+			{/* Previous/Next Navigation */}
+			{(previousTIL || nextTIL) && (
+				<nav className="flex justify-between items-center py-6 border-t border-gray-200">
+					<div className="flex-1">
+						{previousTIL && (
+							<Link
+								href={`/${previousTIL.ulid.toLowerCase()}`}
+								className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors group"
+							>
+								<ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+								<div className="text-left">
+									<div className="text-xs text-gray-500">Previous</div>
+									<div className="text-sm font-medium">{previousTIL.title}</div>
+								</div>
+							</Link>
+						)}
+					</div>
+					<div className="flex-1 text-right">
+						{nextTIL && (
+							<Link
+								href={`/${nextTIL.ulid.toLowerCase()}`}
+								className="flex items-center justify-end space-x-2 text-gray-600 hover:text-gray-900 transition-colors group"
+							>
+								<div className="text-right">
+									<div className="text-xs text-gray-500">Next</div>
+									<div className="text-sm font-medium">{nextTIL.title}</div>
+								</div>
+								<ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+							</Link>
+						)}
+					</div>
+				</nav>
+			)}
+
 			{/* Additional Navigation */}
-			<div className="flex justify-center">
+			<div className="flex justify-center space-x-6 text-sm">
+				<Link
+					href="/"
+					className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors"
+				>
+					<Home size={14} />
+					<span>Back to Home</span>
+				</Link>
 				<Link
 					href="/archive"
-					className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
+					className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors"
 				>
-					View all entries in archive →
+					<Archive size={14} />
+					<span>View all entries</span>
 				</Link>
 			</div>
 		</div>

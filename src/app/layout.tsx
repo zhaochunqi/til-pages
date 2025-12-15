@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Navigation from "../components/Navigation";
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -32,28 +33,7 @@ export default function RootLayout({
 				<div className="min-h-screen">
 					<header className="border-b border-gray-200 bg-white">
 						<div className="max-w-4xl mx-auto px-4 py-6">
-							<nav className="flex items-center justify-between">
-								<a
-									href="/"
-									className="text-xl font-semibold text-gray-900 no-underline hover:text-gray-700"
-								>
-									TIL
-								</a>
-								<div className="flex space-x-6 text-sm">
-									<a
-										href="/"
-										className="text-gray-600 hover:text-gray-900 no-underline"
-									>
-										Home
-									</a>
-									<a
-										href="/archive"
-										className="text-gray-600 hover:text-gray-900 no-underline"
-									>
-										Archive
-									</a>
-								</div>
-							</nav>
+							<Navigation />
 						</div>
 					</header>
 					<main className="max-w-4xl mx-auto px-4 py-8">{children}</main>
