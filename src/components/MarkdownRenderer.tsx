@@ -108,6 +108,30 @@ export default function MarkdownRenderer({
 					td: ({ children }) => (
 						<td className="border border-gray-300 px-4 py-2">{children}</td>
 					),
+					img: ({ src, alt, ...rest }) => {
+						// 如果是本地路径，转换为 CDN URL
+						if (src?.startsWith("../assets/") || src?.startsWith("../")) {
+							const cdnPrefix = "https://cdn.jsdelivr.net/gh/zhaochunqi/til@main";
+							const cleanSrc = src.startsWith("../") ? src.slice(2) : src;
+							const fullSrc = `${cdnPrefix}/${cleanSrc}`;
+							return (
+								<img
+									src={fullSrc}
+									alt={alt}
+									className="max-w-full h-auto rounded-lg shadow-md"
+									{...rest}
+								/>
+							);
+						}
+						return (
+							<img
+								src={src}
+								alt={alt}
+								className="max-w-full h-auto rounded-lg shadow-md"
+								{...rest}
+							/>
+						);
+					},
 				}}
 			>
 				{content}
