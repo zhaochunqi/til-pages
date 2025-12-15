@@ -1,5 +1,5 @@
+import { Archive, Home } from "lucide-react";
 import Link from "next/link";
-import { Home, Archive } from "lucide-react";
 
 /**
  * 404 Not Found page component

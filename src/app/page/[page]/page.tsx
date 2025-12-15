@@ -1,10 +1,10 @@
+import { Archive, BookOpen, Calendar, Home } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { decodeTime } from "ulid";
-import Link from "next/link";
-import { Archive, Calendar, BookOpen, Home } from "lucide-react";
+import { Breadcrumb } from "../../../components/Navigation";
 import Pagination from "../../../components/Pagination";
 import TILCard from "../../../components/TILCard";
-import { Breadcrumb } from "../../../components/Navigation";
 import { contentFetcher } from "../../../lib/content-fetcher";
 import { MarkdownParser } from "../../../lib/markdown-parser";
 import { Page, type TIL } from "../../../types";
@@ -122,13 +122,13 @@ export default async function PaginationPage({ params }: PageProps) {
 			<div className="text-center">
 				<div className="flex items-baseline justify-center space-x-3 mb-2">
 					<BookOpen size={28} className="text-gray-700" />
-					<h1 className="text-3xl font-bold text-gray-900">
-						Today I Learned
-					</h1>
+					<h1 className="text-3xl font-bold text-gray-900">Today I Learned</h1>
 				</div>
 				<p className="text-gray-600 flex items-center justify-center space-x-1">
 					<Calendar size={14} />
-					<span>A collection of things I learn every day - Page {pageNumber}</span>
+					<span>
+						A collection of things I learn every day - Page {pageNumber}
+					</span>
 				</p>
 				<div className="mt-4">
 					<Link

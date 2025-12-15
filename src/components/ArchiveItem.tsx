@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 import type { TIL } from "../types";
 
 interface ArchiveItemProps {
@@ -31,7 +31,10 @@ export default function ArchiveItem({ til, className = "" }: ArchiveItemProps) {
 				"
 			>
 				<span>{til.title}</span>
-				<ExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+				<ExternalLink
+					size={12}
+					className="opacity-0 group-hover:opacity-100 transition-opacity"
+				/>
 			</Link>
 		</div>
 	);

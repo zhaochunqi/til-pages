@@ -1,6 +1,6 @@
-import { decodeTime } from "ulid";
+import { Archive, BookOpen, Calendar } from "lucide-react";
 import Link from "next/link";
-import { Archive, Calendar, BookOpen } from "lucide-react";
+import { decodeTime } from "ulid";
 import Pagination from "../components/Pagination";
 import TILCard from "../components/TILCard";
 import { contentFetcher } from "../lib/content-fetcher";
@@ -68,9 +68,7 @@ export default async function Home() {
 			<div className="text-center">
 				<div className="flex items-baseline justify-center space-x-3 mb-2">
 					<BookOpen size={28} className="text-gray-700" />
-					<h1 className="text-3xl font-bold text-gray-900">
-						Today I Learned
-					</h1>
+					<h1 className="text-3xl font-bold text-gray-900">Today I Learned</h1>
 				</div>
 				<p className="text-gray-600 flex items-center justify-center space-x-1">
 					<Calendar size={14} />

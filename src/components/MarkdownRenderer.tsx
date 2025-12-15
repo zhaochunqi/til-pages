@@ -1,10 +1,10 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import React, { useEffect, useRef, useState } from "react";
 
 interface MarkdownRendererProps {
 	content: string;
@@ -31,8 +31,8 @@ export default function MarkdownRenderer({
 
 		// Dynamic import mermaid only on client side
 		const initMermaid = async () => {
-			const mermaid = (await import('mermaid')).default;
-			
+			const mermaid = (await import("mermaid")).default;
+
 			// Initialize Mermaid
 			mermaid.initialize({
 				startOnLoad: false,
@@ -47,14 +47,14 @@ export default function MarkdownRenderer({
 					if (!element.hasAttribute("data-processed")) {
 						const id = `mermaid-${Math.random().toString(36).substring(2, 11)}`;
 						const code = element.textContent || "";
-						
+
 						try {
 							const { svg } = await mermaid.render(id, code);
 							element.innerHTML = svg;
 							element.setAttribute("data-processed", "true");
 						} catch (error) {
 							console.error("Mermaid rendering error:", error);
-							element.innerHTML = `<div class="text-red-500">Error rendering Mermaid diagram: ${error instanceof Error ? error.message : 'Unknown error'}</div>`;
+							element.innerHTML = `<div class="text-red-500">Error rendering Mermaid diagram: ${error instanceof Error ? error.message : "Unknown error"}</div>`;
 						}
 					}
 				});
@@ -65,7 +65,10 @@ export default function MarkdownRenderer({
 	}, [content, isClient]);
 
 	return (
-		<div className={`prose prose-gray max-w-none ${className}`} ref={mermaidRef}>
+		<div
+			className={`prose prose-gray max-w-none ${className}`}
+			ref={mermaidRef}
+		>
 			<ReactMarkdown
 				remarkPlugins={[remarkGfm]}
 				rehypePlugins={[rehypeRaw, rehypeHighlight]}
@@ -108,20 +111,21 @@ export default function MarkdownRenderer({
 					code: (props: any) => {
 						const { children, className, node, ...rest } = props;
 						// Check if this is a Mermaid code block
-						if (className && typeof className === 'string' && className.includes('language-mermaid')) {
-							return (
-								<div className="mermaid">
-									{children}
-								</div>
-							);
+						if (
+							className &&
+							typeof className === "string" &&
+							className.includes("language-mermaid")
+						) {
+							return <div className="mermaid">{children}</div>;
 						}
-						
+
 						// Check if this is a code block (has a parent pre element) or inline code
-						const isCodeBlock = node?.tagName === 'code' && 
-							className && 
-							typeof className === 'string' && 
-							className.includes('language-');
-						
+						const isCodeBlock =
+							node?.tagName === "code" &&
+							className &&
+							typeof className === "string" &&
+							className.includes("language-");
+
 						if (isCodeBlock) {
 							return (
 								<code
@@ -132,7 +136,7 @@ export default function MarkdownRenderer({
 								</code>
 							);
 						}
-						
+
 						// Inline code
 						return (
 							<code
@@ -144,12 +148,18 @@ export default function MarkdownRenderer({
 						);
 					},
 					pre: ({ children, ...rest }: any) => (
-						<pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto mb-4" {...rest}>
+						<pre
+							className="bg-gray-50 p-4 rounded-lg overflow-x-auto mb-4"
+							{...rest}
+						>
 							{children}
 						</pre>
 					),
 					details: ({ children, open }) => (
-						<details className="mb-4 border border-gray-200 rounded-lg p-2" open={open}>
+						<details
+							className="mb-4 border border-gray-200 rounded-lg p-2"
+							open={open}
+						>
 							{children}
 						</details>
 					),
@@ -185,10 +195,13 @@ export default function MarkdownRenderer({
 					),
 					img: ({ src, alt, ...rest }: any) => {
 						// 如果是本地路径，转换为 CDN URL
-						const srcStr = typeof src === 'string' ? src : '';
+						const srcStr = typeof src === "string" ? src : "";
 						if (srcStr.startsWith("../assets/") || srcStr.startsWith("../")) {
-							const cdnPrefix = "https://cdn.jsdelivr.net/gh/zhaochunqi/til@main";
-							const cleanSrc = srcStr.startsWith("../") ? srcStr.slice(2) : srcStr;
+							const cdnPrefix =
+								"https://cdn.jsdelivr.net/gh/zhaochunqi/til@main";
+							const cleanSrc = srcStr.startsWith("../")
+								? srcStr.slice(2)
+								: srcStr;
 							const fullSrc = `${cdnPrefix}/${cleanSrc}`;
 							return (
 								<img

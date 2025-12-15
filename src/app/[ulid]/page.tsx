@@ -1,7 +1,14 @@
+import {
+	Archive,
+	Calendar,
+	ChevronLeft,
+	ChevronRight,
+	Home,
+	Tag,
+} from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { decodeTime, isValid as isValidULID } from "ulid";
-import Link from "next/link";
-import { ChevronLeft, ChevronRight, Home, Archive, Calendar, Tag } from "lucide-react";
 import MarkdownRenderer from "../../components/MarkdownRenderer";
 import { Breadcrumb } from "../../components/Navigation";
 import { contentFetcher } from "../../lib/content-fetcher";
@@ -108,7 +115,8 @@ export default async function IndividualTILPage({
 
 	// Find previous and next entries for navigation
 	const currentIndex = allTILs.findIndex((t) => t.ulid === ulid);
-	const previousTIL = currentIndex < allTILs.length - 1 ? allTILs[currentIndex + 1] : null;
+	const previousTIL =
+		currentIndex < allTILs.length - 1 ? allTILs[currentIndex + 1] : null;
 	const nextTIL = currentIndex > 0 ? allTILs[currentIndex - 1] : null;
 
 	// Extract timestamp from ULID for display
@@ -134,14 +142,9 @@ export default async function IndividualTILPage({
 			<article className="bg-white border border-gray-200 rounded-lg p-8">
 				{/* Header */}
 				<header className="mb-8 pb-6 border-b border-gray-100">
-					<h1 className="text-3xl font-bold text-gray-900 mb-4">
-						{til.title}
-					</h1>
+					<h1 className="text-3xl font-bold text-gray-900 mb-4">{til.title}</h1>
 					<div className="flex items-center justify-between">
-						<time
-							dateTime={createdAt.toISOString()}
-							className="text-gray-500"
-						>
+						<time dateTime={createdAt.toISOString()} className="text-gray-500">
 							{formattedDate}
 						</time>
 						<div className="text-xs text-gray-400 font-mono">
@@ -192,7 +195,10 @@ export default async function IndividualTILPage({
 								href={`/${previousTIL.ulid.toLowerCase()}`}
 								className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors group"
 							>
-								<ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+								<ChevronLeft
+									size={16}
+									className="group-hover:-translate-x-1 transition-transform"
+								/>
 								<div className="text-left">
 									<div className="text-xs text-gray-500">Previous</div>
 									<div className="text-sm font-medium">{previousTIL.title}</div>
@@ -210,7 +216,10 @@ export default async function IndividualTILPage({
 									<div className="text-xs text-gray-500">Next</div>
 									<div className="text-sm font-medium">{nextTIL.title}</div>
 								</div>
-								<ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+								<ChevronRight
+									size={16}
+									className="group-hover:translate-x-1 transition-transform"
+								/>
 							</Link>
 						)}
 					</div>
