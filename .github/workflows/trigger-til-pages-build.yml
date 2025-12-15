@@ -1,0 +1,38 @@
+name: Trigger TIL Pages Build
+
+# This workflow should be placed in the source repository (zhaochunqi/til)
+# It triggers a build in the til-pages repository when TIL content is updated
+
+on:
+  push:
+    branches: [main, master]
+    paths: 
+      - 'notes/**'
+      - 'source/notes/**'
+  
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  trigger-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Trigger til-pages build
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAGES_TRIGGER_TOKEN }}
+          repository: zhaochunqi/til-pages
+          event-type: til-updated
+          client-payload: |
+            {
+              "ref": "${{ github.ref }}",
+              "sha": "${{ github.sha }}",
+              "timestamp": "${{ github.event.head_commit.timestamp }}"
+            }
+      
+      - name: Log trigger event
+        run: |
+          echo "Triggered til-pages build at $(date)"
+          echo "Source commit: ${{ github.sha }}"
+          echo "Source ref: ${{ github.ref }}"
