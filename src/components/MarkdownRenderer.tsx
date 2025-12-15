@@ -1,7 +1,10 @@
+"use client";
+
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import React, { useEffect, useRef, useState } from "react";
 
 interface MarkdownRendererProps {
 	content: string;
@@ -10,14 +13,59 @@ interface MarkdownRendererProps {
 
 /**
  * MarkdownRenderer component that renders markdown content using react-markdown
- * with GitHub Flavored Markdown support and syntax highlighting
+ * with GitHub Flavored Markdown support, syntax highlighting, and Mermaid diagrams
  */
 export default function MarkdownRenderer({
 	content,
 	className = "",
 }: MarkdownRendererProps) {
+	const [isClient, setIsClient] = useState(false);
+	const mermaidRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
+
+	useEffect(() => {
+		if (!isClient) return;
+
+		// Dynamic import mermaid only on client side
+		const initMermaid = async () => {
+			const mermaid = (await import('mermaid')).default;
+			
+			// Initialize Mermaid
+			mermaid.initialize({
+				startOnLoad: false,
+				theme: "default",
+				securityLevel: "loose",
+			});
+
+			// Render Mermaid diagrams
+			if (mermaidRef.current) {
+				const mermaidElements = mermaidRef.current.querySelectorAll(".mermaid");
+				mermaidElements.forEach(async (element) => {
+					if (!element.hasAttribute("data-processed")) {
+						const id = `mermaid-${Math.random().toString(36).substring(2, 11)}`;
+						const code = element.textContent || "";
+						
+						try {
+							const { svg } = await mermaid.render(id, code);
+							element.innerHTML = svg;
+							element.setAttribute("data-processed", "true");
+						} catch (error) {
+							console.error("Mermaid rendering error:", error);
+							element.innerHTML = `<div class="text-red-500">Error rendering Mermaid diagram: ${error instanceof Error ? error.message : 'Unknown error'}</div>`;
+						}
+					}
+				});
+			}
+		};
+
+		initMermaid();
+	}, [content, isClient]);
+
 	return (
-		<div className={`prose prose-gray max-w-none ${className}`}>
+		<div className={`prose prose-gray max-w-none ${className}`} ref={mermaidRef}>
 			<ReactMarkdown
 				remarkPlugins={[remarkGfm]}
 				rehypePlugins={[rehypeRaw, rehypeHighlight]}
@@ -57,8 +105,17 @@ export default function MarkdownRenderer({
 							{children}
 						</blockquote>
 					),
-					code: (props) => {
+					code: (props: any) => {
 						const { children, className, node, ...rest } = props;
+						// Check if this is a Mermaid code block
+						if (className && typeof className === 'string' && className.includes('language-mermaid')) {
+							return (
+								<div className="mermaid">
+									{children}
+								</div>
+							);
+						}
+						
 						// Check if this is a code block (has a parent pre element) or inline code
 						const isCodeBlock = node?.tagName === 'code' && 
 							className && 
@@ -86,8 +143,8 @@ export default function MarkdownRenderer({
 							</code>
 						);
 					},
-					pre: ({ children }) => (
-						<pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto mb-4">
+					pre: ({ children, ...rest }: any) => (
+						<pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto mb-4" {...rest}>
 							{children}
 						</pre>
 					),
@@ -126,7 +183,7 @@ export default function MarkdownRenderer({
 					td: ({ children }) => (
 						<td className="border border-gray-300 px-4 py-2">{children}</td>
 					),
-img: ({ src, alt, ...rest }) => {
+					img: ({ src, alt, ...rest }: any) => {
 						// 如果是本地路径，转换为 CDN URL
 						const srcStr = typeof src === 'string' ? src : '';
 						if (srcStr.startsWith("../assets/") || srcStr.startsWith("../")) {

@@ -88,4 +88,18 @@ describe("MarkdownRenderer", () => {
 		expect(container.querySelector("ul")).toBeTruthy();
 		expect(container.querySelectorAll("li")).toHaveLength(4);
 	});
+
+	it("renders Mermaid diagrams", () => {
+		const content = `\`\`\`mermaid
+graph TD
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Action 1]
+    B -->|No| D[Action 2]
+\`\`\``;
+		const { container } = render(<MarkdownRenderer content={content} />);
+
+		const mermaidElement = container.querySelector(".mermaid");
+		expect(mermaidElement).toBeTruthy();
+		expect(mermaidElement?.textContent).toContain("graph TD");
+	});
 });

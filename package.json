@@ -13,9 +13,11 @@
 		"test:property": "vitest --run --grep=\"Property\""
 	},
 	"dependencies": {
+		"@types/mermaid": "^9.2.0",
 		"gray-matter": "^4.0.3",
 		"highlight.js": "^11.11.1",
 		"lucide-react": "^0.561.0",
+		"mermaid": "^11.12.2",
 		"next": "16.0.10",
 		"react": "19.2.1",
 		"react-dom": "19.2.1",
