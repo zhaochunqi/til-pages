@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
 interface MarkdownRendererProps {
@@ -19,7 +20,7 @@ export default function MarkdownRenderer({
 		<div className={`prose prose-gray max-w-none ${className}`}>
 			<ReactMarkdown
 				remarkPlugins={[remarkGfm]}
-				rehypePlugins={[rehypeHighlight]}
+				rehypePlugins={[rehypeRaw, rehypeHighlight]}
 				components={{
 					// Custom components for better styling
 					h1: ({ children }) => (
@@ -83,6 +84,16 @@ export default function MarkdownRenderer({
 							{children}
 						</pre>
 					),
+					details: ({ children, open }) => (
+						<details className="mb-4 border border-gray-200 rounded-lg p-2" open={open}>
+							{children}
+						</details>
+					),
+					summary: ({ children }) => (
+						<summary className="cursor-pointer font-medium text-gray-700 hover:text-gray-900 select-none">
+							{children}
+						</summary>
+					),
 					a: ({ children, href }) => (
 						<a
 							href={href}
@@ -108,11 +119,12 @@ export default function MarkdownRenderer({
 					td: ({ children }) => (
 						<td className="border border-gray-300 px-4 py-2">{children}</td>
 					),
-					img: ({ src, alt, ...rest }) => {
+img: ({ src, alt, ...rest }) => {
 						// 如果是本地路径，转换为 CDN URL
-						if (src?.startsWith("../assets/") || src?.startsWith("../")) {
+						const srcStr = typeof src === 'string' ? src : '';
+						if (srcStr.startsWith("../assets/") || srcStr.startsWith("../")) {
 							const cdnPrefix = "https://cdn.jsdelivr.net/gh/zhaochunqi/til@main";
-							const cleanSrc = src.startsWith("../") ? src.slice(2) : src;
+							const cleanSrc = srcStr.startsWith("../") ? srcStr.slice(2) : srcStr;
 							const fullSrc = `${cdnPrefix}/${cleanSrc}`;
 							return (
 								<img
