@@ -15,6 +15,11 @@ export const metadata: Metadata = {
 	keywords: ["TIL", "Today I Learned", "learning", "notes", "knowledge"],
 	authors: [{ name: "TIL Author" }],
 	robots: "index, follow",
+	icons: {
+		icon: "/til.svg",
+		shortcut: "/til.svg",
+		apple: "/til.svg",
+	},
 };
 
 export const viewport: Viewport = {
