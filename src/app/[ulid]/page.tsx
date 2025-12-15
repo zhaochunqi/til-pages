@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
 	Archive,
 	Calendar,
@@ -82,6 +83,22 @@ interface IndividualPageProps {
 		ulid: string;
 	}>;
 }
+
+export async function generateMetadata({ params }: IndividualPageProps): Promise<Metadata> {
+	const { ulid } = await params;
+	const til = (await getAllTILs()).find(t => t.ulid === ulid.toUpperCase());
+	
+	return til ? {
+		title: `${til.title} | TIL`,
+		description: til.content.slice(0, 160) + '...'
+	} : {
+		title: "TIL Not Found"
+	};
+}
+
+
+
+
 
 /**
  * Individual TIL page component displaying a single TIL entry
