@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import { Loader2 } from "lucide-react";
 
 interface MarkdownRendererProps {
 	content: string;
@@ -26,43 +27,57 @@ export default function MarkdownRenderer({
 		setIsClient(true);
 	}, []);
 
+	// Only process mermaid on client and after component mounts
 	useEffect(() => {
 		if (!isClient) return;
 
-		// Dynamic import mermaid only on client side
-		const initMermaid = async () => {
+		const processMermaid = async () => {
 			const mermaid = (await import("mermaid")).default;
-
-			// Initialize Mermaid
+			
 			mermaid.initialize({
 				startOnLoad: false,
 				theme: "default",
 				securityLevel: "loose",
 			});
 
-			// Render Mermaid diagrams
 			if (mermaidRef.current) {
-				const mermaidElements = mermaidRef.current.querySelectorAll(".mermaid");
-				mermaidElements.forEach(async (element) => {
+				const elements = mermaidRef.current.querySelectorAll(".mermaid");
+				elements.forEach(async (element) => {
 					if (!element.hasAttribute("data-processed")) {
-						const id = `mermaid-${Math.random().toString(36).substring(2, 11)}`;
-						const code = element.textContent || "";
+						const id = `mermaid-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+						const contentElement = element.querySelector(".mermaid-content") as HTMLElement;
+						const loadingElement = element.querySelector(".mermaid-loading") as HTMLElement;
+						const code = contentElement?.textContent || "";
 
 						try {
+							// Hide loading, show content during render
+							if (loadingElement) loadingElement.style.display = "none";
+							if (contentElement) contentElement.style.display = "block";
+
 							const { svg } = await mermaid.render(id, code);
 							element.innerHTML = svg;
 							element.setAttribute("data-processed", "true");
 						} catch (error) {
 							console.error("Mermaid rendering error:", error);
-							element.innerHTML = `<div class="text-red-500">Error rendering Mermaid diagram: ${error instanceof Error ? error.message : "Unknown error"}</div>`;
+							if (loadingElement) {
+								loadingElement.innerHTML = `
+									<div class="flex items-center gap-2 text-red-500">
+										<span class="text-sm">Failed to render diagram</span>
+									</div>
+								`;
+								loadingElement.style.display = "flex";
+							}
+							if (contentElement) contentElement.style.display = "none";
 						}
 					}
 				});
 			}
 		};
 
-		initMermaid();
-	}, [content, isClient]);
+		// Small delay to ensure DOM is ready
+		const timeoutId = setTimeout(processMermaid, 100);
+		return () => clearTimeout(timeoutId);
+	}, [isClient]);
 
 	return (
 		<div
@@ -73,7 +88,6 @@ export default function MarkdownRenderer({
 				remarkPlugins={[remarkGfm]}
 				rehypePlugins={[rehypeRaw, rehypeHighlight]}
 				components={{
-					// Custom components for better styling
 					h1: ({ children }) => (
 						<h1 className="text-2xl font-bold mb-4 text-gray-900">
 							{children}
@@ -110,16 +124,25 @@ export default function MarkdownRenderer({
 					),
 					code: (props: any) => {
 						const { children, className, node, ...rest } = props;
+						
 						// Check if this is a Mermaid code block
 						if (
 							className &&
 							typeof className === "string" &&
 							className.includes("language-mermaid")
 						) {
-							return <div className="mermaid">{children}</div>;
+							return (
+								<div className="mermaid relative min-h-[100px] flex items-center justify-center">
+									<div className="mermaid-content hidden">{children}</div>
+									<div className="mermaid-loading flex items-center gap-2 text-gray-500">
+										<Loader2 className="w-4 h-4 animate-spin" />
+										<span className="text-sm">Rendering diagram...</span>
+									</div>
+								</div>
+							);
 						}
 
-						// Check if this is a code block (has a parent pre element) or inline code
+						// Check if this is a code block
 						const isCodeBlock =
 							node?.tagName === "code" &&
 							className &&
