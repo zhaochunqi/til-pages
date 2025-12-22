@@ -9,8 +9,8 @@ interface MermaidRendererProps {
 
 export const MermaidRenderer = ({ children }: MermaidRendererProps) => {
     const [isClient, setIsClient] = useState(false);
-    const [isRendered, setIsRendered] = useState(false);
-    const elementRef = useRef<HTMLDivElement>(null);
+    const [svg, setSvg] = useState<string>("");
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         setIsClient(true);
@@ -28,21 +28,12 @@ export const MermaidRenderer = ({ children }: MermaidRendererProps) => {
                     securityLevel: "loose",
                 });
 
-                if (elementRef.current) {
-                    const id = `mermaid-${Math.random().toString(36).substring(2, 11)}`;
-                    const { svg } = await mermaid.render(id, children.trim());
-                    elementRef.current.innerHTML = svg;
-                    setIsRendered(true);
-                }
-            } catch (error) {
-                console.error("Mermaid rendering error:", error);
-                if (elementRef.current) {
-                    elementRef.current.innerHTML = `
-						<div class="flex items-center gap-2 text-red-500">
-							<span class="text-sm">Failed to render diagram</span>
-						</div>
-					`;
-                }
+                const id = `mermaid-${Math.random().toString(36).substring(2, 11)}`;
+                const { svg: renderedSvg } = await mermaid.render(id, children.trim());
+                setSvg(renderedSvg);
+            } catch (err) {
+                console.error("Mermaid rendering error:", err);
+                setError("Failed to render diagram");
             }
         };
 
@@ -50,12 +41,22 @@ export const MermaidRenderer = ({ children }: MermaidRendererProps) => {
         return () => clearTimeout(timeoutId);
     }, [isClient, children]);
 
+    if (error) {
+        return (
+            <div className="flex items-center gap-2 text-red-500 my-4">
+                <span className="text-sm">{error}</span>
+            </div>
+        );
+    }
+
     return (
-        <div
-            ref={elementRef}
-            className="mermaid relative min-h-[100px] flex items-center justify-center my-4"
-        >
-            {!isRendered && (
+        <div className="mermaid relative min-h-[100px] flex items-center justify-center my-4">
+            {svg ? (
+                <div
+                    className="w-full flex justify-center"
+                    dangerouslySetInnerHTML={{ __html: svg }}
+                />
+            ) : (
                 <div className="mermaid-loading flex items-center gap-2 text-gray-500">
                     <Loader2 className="w-4 h-4 animate-spin" />
                     <span className="text-sm">Rendering diagram...</span>
