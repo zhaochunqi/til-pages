@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Archive, Calendar, Home } from "lucide-react";
 import Link from "next/link";
-import { decodeTime } from "ulid";
 import ArchiveItem from "../../components/ArchiveItem";
 import { Breadcrumb } from "../../components/Navigation";
-import { contentFetcher } from "../../lib/content-fetcher";
-import { MarkdownParser } from "../../lib/markdown-parser";
+import { getAllTILs } from "../../lib/data";
 import type { TIL } from "../../types";
 
 export const metadata: Metadata = {
@@ -13,48 +11,7 @@ export const metadata: Metadata = {
 	description: "Browse the full history of my daily learnings and technical notes.",
 };
 
-/**
- * Convert ParsedNote to TIL interface
- */
-function parsedNoteToTIL(parsedNote: {
-	ulid: string;
-	title: string;
-	content: string;
-	tags: string[];
-}): TIL {
-	return {
-		ulid: parsedNote.ulid,
-		title: parsedNote.title,
-		content: parsedNote.content,
-		tags: parsedNote.tags,
-	};
-}
 
-/**
- * Get all TIL entries sorted by creation date (newest first)
- */
-async function getAllTILs(): Promise<TIL[]> {
-	try {
-		// Fetch raw notes from the content fetcher
-		const rawNotes = await contentFetcher.fetchValidNotes();
-
-		// Parse markdown content and extract metadata
-		const parsedNotes = MarkdownParser.parseFiles(rawNotes);
-
-		// Convert to TIL format
-		const tils = parsedNotes.map(parsedNoteToTIL);
-
-		// Sort by creation date (newest first) using ULID timestamp
-		return tils.sort((a, b) => {
-			const timeA = decodeTime(a.ulid);
-			const timeB = decodeTime(b.ulid);
-			return timeB - timeA; // Descending order (newest first)
-		});
-	} catch (error) {
-		console.error("Error fetching TIL entries:", error);
-		return [];
-	}
-}
 
 /**
  * Archive page component displaying all TIL entries as title-link pairs

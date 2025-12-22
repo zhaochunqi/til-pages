@@ -20,6 +20,7 @@ jobs:
       contents: read
       pages: write
       id-token: write
+      pull-requests: read
     
     # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
     concurrency:
@@ -61,8 +62,7 @@ jobs:
           echo "Fetching TIL content from source repository..."
           git clone --depth 1 https://github.com/zhaochunqi/til.git source
           echo "Source content fetched successfully"
-          ls -la source/
-          ls -la source/notes/ | head -10
+          echo "TIL count: $(ls source/notes/*.md 2>/dev/null | wc -l)"
       
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -73,7 +73,8 @@ jobs:
       - name: Build static site
         run: |
           echo "Building static site..."
-          pnpm build
+          echo "Build started at $(date)"
+          time pnpm build
           echo "Build completed successfully"
           ls -la out/
       

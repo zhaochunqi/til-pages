@@ -1,54 +1,10 @@
 import { Archive, BookOpen, Calendar } from "lucide-react";
 import Link from "next/link";
-import { decodeTime } from "ulid";
+
 import Pagination from "../components/Pagination";
 import TILCard from "../components/TILCard";
-import { contentFetcher } from "../lib/content-fetcher";
-import { MarkdownParser } from "../lib/markdown-parser";
+import { getAllTILs } from "../lib/data";
 import { Page, type TIL } from "../types";
-
-/**
- * Convert ParsedNote to TIL interface
- */
-function parsedNoteToTIL(parsedNote: {
-	ulid: string;
-	title: string;
-	content: string;
-	tags: string[];
-}): TIL {
-	return {
-		ulid: parsedNote.ulid,
-		title: parsedNote.title,
-		content: parsedNote.content,
-		tags: parsedNote.tags,
-	};
-}
-
-/**
- * Get all TIL entries sorted by creation date (newest first)
- */
-async function getAllTILs(): Promise<TIL[]> {
-	try {
-		// Fetch raw notes from the content fetcher
-		const rawNotes = await contentFetcher.fetchValidNotes();
-
-		// Parse markdown content and extract metadata
-		const parsedNotes = MarkdownParser.parseFiles(rawNotes);
-
-		// Convert to TIL format
-		const tils = parsedNotes.map(parsedNoteToTIL);
-
-		// Sort by creation date (newest first) using ULID timestamp
-		return tils.sort((a, b) => {
-			const timeA = decodeTime(a.ulid);
-			const timeB = decodeTime(b.ulid);
-			return timeB - timeA; // Descending order (newest first)
-		});
-	} catch (error) {
-		console.error("Error fetching TIL entries:", error);
-		return [];
-	}
-}
 
 /**
  * Homepage component displaying the latest TIL entries with pagination

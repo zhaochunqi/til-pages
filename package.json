@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build",
+		"build": "next build && rm -f .build-cache.json .build-cache.lock",
 		"start": "next start",
 		"lint": "eslint",
 		"test": "vitest --run",

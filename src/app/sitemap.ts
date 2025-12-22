@@ -31,11 +31,7 @@ async function getAllTILs(): Promise<TIL[]> {
         const rawNotes = await contentFetcher.fetchValidNotes();
         const parsedNotes = MarkdownParser.parseFiles(rawNotes);
         const tils = parsedNotes.map(parsedNoteToTIL);
-        return tils.sort((a, b) => {
-            const timeA = decodeTime(a.ulid);
-            const timeB = decodeTime(b.ulid);
-            return timeB - timeA;
-        });
+        return tils.sort((a, b) => b.ulid.localeCompare(a.ulid));
     } catch (error) {
         console.error("Error fetching TIL entries for sitemap:", error);
         return [];
