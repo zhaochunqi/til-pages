@@ -5,7 +5,49 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import { Loader2 } from "lucide-react";
+import { Check, Copy, Loader2 } from "lucide-react";
+
+
+interface PreBlockProps extends React.HTMLAttributes<HTMLPreElement> {
+	children?: React.ReactNode;
+}
+
+const PreBlock = ({ children, ...rest }: PreBlockProps) => {
+	const preRef = useRef<HTMLPreElement>(null);
+	const [isCopied, setIsCopied] = useState(false);
+
+	const handleCopy = async () => {
+		if (preRef.current) {
+			const text = preRef.current.textContent || "";
+			await navigator.clipboard.writeText(text);
+			setIsCopied(true);
+			setTimeout(() => setIsCopied(false), 2000);
+		}
+	};
+
+	return (
+		<div className="relative group mb-4">
+			<pre
+				ref={preRef}
+				className="bg-gray-50 p-4 rounded-lg overflow-x-auto"
+				{...rest}
+			>
+				{children}
+			</pre>
+			<button
+				onClick={handleCopy}
+				className="absolute top-3 right-3 p-1.5 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-md shadow-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 opacity-0 group-hover:opacity-100 transition-all duration-200 focus:opacity-100 z-10"
+				aria-label="Copy code"
+			>
+				{isCopied ? (
+					<Check className="w-3.5 h-3.5 text-green-600 dark:text-green-500" />
+				) : (
+					<Copy className="w-3.5 h-3.5" />
+				)}
+			</button>
+		</div>
+	);
+};
 
 interface MarkdownRendererProps {
 	content: string;
@@ -33,7 +75,7 @@ export default function MarkdownRenderer({
 
 		const processMermaid = async () => {
 			const mermaid = (await import("mermaid")).default;
-			
+
 			mermaid.initialize({
 				startOnLoad: false,
 				theme: "default",
@@ -124,7 +166,7 @@ export default function MarkdownRenderer({
 					),
 					code: (props: any) => {
 						const { children, className, node, ...rest } = props;
-						
+
 						// Check if this is a Mermaid code block
 						if (
 							className &&
@@ -152,7 +194,7 @@ export default function MarkdownRenderer({
 						if (isCodeBlock) {
 							return (
 								<code
-									className={`block bg-gray-50 p-4 rounded-lg overflow-x-auto text-sm font-mono ${className || ""}`}
+									className={`text-sm font-mono ${className || ""}`}
 									{...rest}
 								>
 									{children}
@@ -170,14 +212,7 @@ export default function MarkdownRenderer({
 							</code>
 						);
 					},
-					pre: ({ children, ...rest }: any) => (
-						<pre
-							className="bg-gray-50 p-4 rounded-lg overflow-x-auto mb-4"
-							{...rest}
-						>
-							{children}
-						</pre>
-					),
+					pre: PreBlock,
 					details: ({ children, open }) => (
 						<details
 							className="mb-4 border border-gray-200 rounded-lg p-2"
