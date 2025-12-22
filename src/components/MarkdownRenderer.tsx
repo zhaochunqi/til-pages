@@ -29,18 +29,19 @@ const PreBlock = ({ children, ...rest }: PreBlockProps) => {
 		<div className="relative group mb-4">
 			<pre
 				ref={preRef}
-				className="bg-gray-50 p-4 rounded-lg overflow-x-auto"
+				className="bg-gray-50 border border-gray-200 p-4 rounded-none overflow-x-auto"
 				{...rest}
 			>
 				{children}
 			</pre>
 			<button
+				type="button"
 				onClick={handleCopy}
-				className="absolute top-3 right-3 p-1.5 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-md shadow-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 opacity-0 group-hover:opacity-100 transition-all duration-200 focus:opacity-100 z-10"
+				className="absolute top-3 right-3 p-1.5 bg-white/90 hover:bg-gray-50 backdrop-blur-sm border border-gray-200 rounded-none shadow-xs text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-150 focus:opacity-100 z-10"
 				aria-label="Copy code"
 			>
 				{isCopied ? (
-					<Check className="w-3.5 h-3.5 text-green-600 dark:text-green-500" />
+					<Check className="w-3.5 h-3.5 text-gray-700" />
 				) : (
 					<Copy className="w-3.5 h-3.5" />
 				)}
