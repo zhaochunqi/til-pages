@@ -84,15 +84,38 @@ interface IndividualPageProps {
 	}>;
 }
 
-export async function generateMetadata({ params }: IndividualPageProps): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: IndividualPageProps): Promise<Metadata> {
 	const { ulid } = await params;
-	const til = (await getAllTILs()).find(t => t.ulid === ulid.toUpperCase());
-	
-	return til ? {
-		title: `${til.title} | TIL`,
-		description: til.content.slice(0, 160) + '...'
-	} : {
-		title: "TIL Not Found"
+	const til = (await getAllTILs()).find((t) => t.ulid === ulid.toUpperCase());
+
+	if (!til) {
+		return {
+			title: "TIL Not Found",
+		};
+	}
+
+	const description =
+		til.content.slice(0, 160).replace(/[#*`]/g, "").trim() + "...";
+
+	return {
+		title: til.title,
+		description: description,
+		keywords: [...til.tags, "TIL", "Today I Learned"],
+		openGraph: {
+			title: til.title,
+			description: description,
+			type: "article",
+			publishedTime: new Date(decodeTime(til.ulid)).toISOString(),
+			authors: ["Chunqi Zhao"],
+			tags: til.tags,
+		},
+		twitter: {
+			card: "summary_large_image",
+			title: til.title,
+			description: description,
+		},
 	};
 }
 
@@ -145,8 +168,30 @@ export default async function IndividualTILPage({
 		weekday: "long",
 	});
 
+	// JSON-LD structured data
+	const jsonLd = {
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		headline: til.title,
+		datePublished: createdAt.toISOString(),
+		dateModified: createdAt.toISOString(),
+		author: {
+			"@type": "Person",
+			name: "Chunqi Zhao",
+			url: "https://zhaochunqi.com",
+		},
+		description: til.content.slice(0, 160).replace(/[#*`]/g, "").trim(),
+		keywords: til.tags.join(", "),
+	};
+
 	return (
 		<div className="space-y-8">
+			{/* Add JSON-LD to the page */}
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+			/>
+
 			{/* Breadcrumb Navigation */}
 			<Breadcrumb
 				items={[

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Archive, BookOpen, Calendar, Home } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,6 +9,16 @@ import TILCard from "../../../components/TILCard";
 import { contentFetcher } from "../../../lib/content-fetcher";
 import { MarkdownParser } from "../../../lib/markdown-parser";
 import { Page, type TIL } from "../../../types";
+
+export async function generateMetadata({
+	params,
+}: PageProps): Promise<Metadata> {
+	const resolvedParams = await params;
+	return {
+		title: `Page ${resolvedParams.page}`,
+		description: `Browse page ${resolvedParams.page} of my daily learnings and technical notes.`,
+	};
+}
 
 /**
  * Convert ParsedNote to TIL interface

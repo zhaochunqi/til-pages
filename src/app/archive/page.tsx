@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Archive, Calendar, Home } from "lucide-react";
 import Link from "next/link";
 import { decodeTime } from "ulid";
@@ -6,6 +7,11 @@ import { Breadcrumb } from "../../components/Navigation";
 import { contentFetcher } from "../../lib/content-fetcher";
 import { MarkdownParser } from "../../lib/markdown-parser";
 import type { TIL } from "../../types";
+
+export const metadata: Metadata = {
+	title: "Archive",
+	description: "Browse the full history of my daily learnings and technical notes.",
+};
 
 /**
  * Convert ParsedNote to TIL interface

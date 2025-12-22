@@ -11,15 +11,42 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	title: "TIL - Today I Learned",
+	metadataBase: new URL("https://til.zhaochunqi.com"),
+	title: {
+		default: "TIL - Today I Learned",
+		template: "%s | TIL",
+	},
 	description: "A minimal collection of things I learn every day",
 	keywords: ["TIL", "Today I Learned", "learning", "notes", "knowledge"],
-	authors: [{ name: "TIL Author" }],
+	authors: [{ name: "Chunqi Zhao", url: "https://zhaochunqi.com" }],
+	creator: "Chunqi Zhao",
 	robots: "index, follow",
 	icons: {
 		icon: "/til.svg",
 		shortcut: "/til.svg",
 		apple: "/til.svg",
+	},
+	openGraph: {
+		type: "website",
+		locale: "en_US",
+		url: "https://til.zhaochunqi.com",
+		siteName: "TIL - Today I Learned",
+		title: "TIL - Today I Learned",
+		description: "A minimal collection of things I learn every day",
+		images: [
+			{
+				url: "/til.svg",
+				width: 800,
+				height: 600,
+				alt: "TIL Logo",
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "TIL - Today I Learned",
+		description: "A minimal collection of things I learn every day",
+		images: ["/til.svg"],
 	},
 };
 
