@@ -1,54 +1,10 @@
-"use client";
-
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
-import { Check, Copy, Loader2 } from "lucide-react";
-
-
-interface PreBlockProps extends React.HTMLAttributes<HTMLPreElement> {
-	children?: React.ReactNode;
-}
-
-const PreBlock = ({ children, ...rest }: PreBlockProps) => {
-	const preRef = useRef<HTMLPreElement>(null);
-	const [isCopied, setIsCopied] = useState(false);
-
-	const handleCopy = async () => {
-		if (preRef.current) {
-			const text = preRef.current.textContent || "";
-			await navigator.clipboard.writeText(text);
-			setIsCopied(true);
-			setTimeout(() => setIsCopied(false), 2000);
-		}
-	};
-
-	return (
-		<div className="relative group mb-4">
-			<pre
-				ref={preRef}
-				className="bg-gray-50 border border-gray-200 p-4 rounded-none overflow-x-auto"
-				{...rest}
-			>
-				{children}
-			</pre>
-			<button
-				type="button"
-				onClick={handleCopy}
-				className="absolute top-3 right-3 p-1.5 bg-white/90 hover:bg-gray-50 backdrop-blur-sm border border-gray-200 rounded-none shadow-xs text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-150 focus:opacity-100 z-10"
-				aria-label="Copy code"
-			>
-				{isCopied ? (
-					<Check className="w-3.5 h-3.5 text-gray-700" />
-				) : (
-					<Copy className="w-3.5 h-3.5" />
-				)}
-			</button>
-		</div>
-	);
-};
+import { PreBlock } from "./PreBlock";
+import { MermaidRenderer } from "./MermaidRenderer";
 
 interface MarkdownRendererProps {
 	content: string;
@@ -57,79 +13,18 @@ interface MarkdownRendererProps {
 
 /**
  * MarkdownRenderer component that renders markdown content using react-markdown
- * with GitHub Flavored Markdown support, syntax highlighting, and Mermaid diagrams
+ * with GitHub Flavored Markdown support, syntax highlighting on the server, 
+ * and Mermaid diagrams on the client.
  */
 export default function MarkdownRenderer({
 	content,
 	className = "",
 }: MarkdownRendererProps) {
-	const [isClient, setIsClient] = useState(false);
-	const mermaidRef = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		setIsClient(true);
-	}, []);
-
-	// Only process mermaid on client and after component mounts
-	useEffect(() => {
-		if (!isClient) return;
-
-		const processMermaid = async () => {
-			const mermaid = (await import("mermaid")).default;
-
-			mermaid.initialize({
-				startOnLoad: false,
-				theme: "default",
-				securityLevel: "loose",
-			});
-
-			if (mermaidRef.current) {
-				const elements = mermaidRef.current.querySelectorAll(".mermaid");
-				elements.forEach(async (element) => {
-					if (!element.hasAttribute("data-processed")) {
-						const id = `mermaid-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
-						const contentElement = element.querySelector(".mermaid-content") as HTMLElement;
-						const loadingElement = element.querySelector(".mermaid-loading") as HTMLElement;
-						const code = contentElement?.textContent || "";
-
-						try {
-							// Hide loading, show content during render
-							if (loadingElement) loadingElement.style.display = "none";
-							if (contentElement) contentElement.style.display = "block";
-
-							const { svg } = await mermaid.render(id, code);
-							element.innerHTML = svg;
-							element.setAttribute("data-processed", "true");
-						} catch (error) {
-							console.error("Mermaid rendering error:", error);
-							if (loadingElement) {
-								loadingElement.innerHTML = `
-									<div class="flex items-center gap-2 text-red-500">
-										<span class="text-sm">Failed to render diagram</span>
-									</div>
-								`;
-								loadingElement.style.display = "flex";
-							}
-							if (contentElement) contentElement.style.display = "none";
-						}
-					}
-				});
-			}
-		};
-
-		// Small delay to ensure DOM is ready
-		const timeoutId = setTimeout(processMermaid, 100);
-		return () => clearTimeout(timeoutId);
-	}, [isClient]);
-
 	return (
-		<div
-			className={`prose prose-gray max-w-none ${className}`}
-			ref={mermaidRef}
-		>
+		<div className={`prose prose-gray max-w-none ${className}`}>
 			<ReactMarkdown
 				remarkPlugins={[remarkGfm]}
-				rehypePlugins={[rehypeRaw, rehypeHighlight]}
+				rehypePlugins={[rehypeRaw, [rehypeHighlight, { detect: true }]]}
 				components={{
 					h1: ({ children }) => (
 						<h1 className="text-2xl font-bold mb-4 text-gray-900">
@@ -174,15 +69,7 @@ export default function MarkdownRenderer({
 							typeof className === "string" &&
 							className.includes("language-mermaid")
 						) {
-							return (
-								<div className="mermaid relative min-h-[100px] flex items-center justify-center">
-									<div className="mermaid-content hidden">{children}</div>
-									<div className="mermaid-loading flex items-center gap-2 text-gray-500">
-										<Loader2 className="w-4 h-4 animate-spin" />
-										<span className="text-sm">Rendering diagram...</span>
-									</div>
-								</div>
-							);
+							return <MermaidRenderer>{String(children)}</MermaidRenderer>;
 						}
 
 						// Check if this is a code block
@@ -268,6 +155,7 @@ export default function MarkdownRenderer({
 									alt={alt}
 									className="max-w-full h-auto rounded-lg shadow-md"
 									{...rest}
+									loading="lazy"
 								/>
 							);
 						}
@@ -277,6 +165,7 @@ export default function MarkdownRenderer({
 								alt={alt}
 								className="max-w-full h-auto rounded-lg shadow-md"
 								{...rest}
+								loading="lazy"
 							/>
 						);
 					},
