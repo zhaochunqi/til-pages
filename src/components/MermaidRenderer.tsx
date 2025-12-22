@@ -51,6 +51,7 @@ export const MermaidRenderer = ({ children }: MermaidRendererProps) => {
 
     return (
         <div className="mermaid relative min-h-[100px] flex items-center justify-center my-4">
+            <div className="mermaid-content hidden">{children}</div>
             {svg ? (
                 <div
                     className="w-full flex justify-center"
