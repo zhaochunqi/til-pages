@@ -12,6 +12,7 @@ import { notFound } from "next/navigation";
 import { decodeTime, isValid as isValidULID } from "ulid";
 import MarkdownRenderer from "../../components/MarkdownRenderer";
 import { Breadcrumb } from "../../components/Navigation";
+import TILReference from "../../components/TILReference";
 import { getAllTILs } from "../../lib/data";
 import type { TIL } from "../../types";
 
@@ -180,6 +181,12 @@ export default async function IndividualTILPage({
 						className="prose-lg max-w-none"
 					/>
 				</div>
+
+				{/* TIL Reference */}
+				<TILReference
+					title={til.title}
+					url={`https://til.zhaochunqi.com/${til.ulid.toLowerCase()}`}
+				/>
 
 				{/* Tags */}
 				{til.tags.length > 0 && (
