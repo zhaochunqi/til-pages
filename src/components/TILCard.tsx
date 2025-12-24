@@ -3,6 +3,7 @@ import Link from "next/link";
 import { decodeTime } from "ulid";
 import type { TIL } from "../types";
 import MarkdownRenderer from "./MarkdownRenderer";
+import Tags from "./Tags";
 
 interface TILCardProps {
 	til: TIL;
@@ -73,19 +74,8 @@ export default function TILCard({
 
 			{/* Tags */}
 			{til.tags.length > 0 && (
-				<footer className="flex flex-wrap gap-2">
-					{til.tags.map((tag) => (
-						<span
-							key={tag}
-							className="
-								inline-block px-2 py-1 text-xs
-								bg-gray-100 text-gray-700 rounded
-								hover:bg-gray-200 transition-colors
-							"
-						>
-							{tag}
-						</span>
-					))}
+				<footer>
+					<Tags tags={til.tags} variant="card" />
 				</footer>
 			)}
 		</article>

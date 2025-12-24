@@ -5,13 +5,13 @@ import {
 	ChevronLeft,
 	ChevronRight,
 	Home,
-	Tag,
 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { decodeTime, isValid as isValidULID } from "ulid";
 import MarkdownRenderer from "../../components/MarkdownRenderer";
 import { Breadcrumb } from "../../components/Navigation";
+import Tags from "../../components/Tags";
 import TILReference from "../../components/TILReference";
 import { getAllTILs } from "../../lib/data";
 import type { TIL } from "../../types";
@@ -159,12 +159,12 @@ export default async function IndividualTILPage({
 				]}
 			/>
 
-			{/* Article */}
-			<article className="bg-white border border-gray-200 rounded-lg p-8">
-				{/* Header */}
-				<header className="mb-8 pb-6 border-b border-gray-100">
+			{/* Article with enhanced single-page layout */}
+			<article className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+				{/* Header with enhanced styling for single page */}
+				<header className="px-8 pt-8 pb-6 border-b border-gray-100">
 					<h1 className="text-3xl font-bold text-gray-900 mb-4">{til.title}</h1>
-					<div className="flex items-center justify-between">
+					<div className="flex items-center justify-between mb-6">
 						<time dateTime={createdAt.toISOString()} className="text-gray-500">
 							{formattedDate}
 						</time>
@@ -172,45 +172,26 @@ export default async function IndividualTILPage({
 							id: {til.ulid}
 						</div>
 					</div>
+
+					{/* TIL Reference - moved to header */}
+					<TILReference
+						title={til.title}
+						url={`https://til.zhaochunqi.com/${til.ulid.toLowerCase()}`}
+					/>
 				</header>
 
 				{/* Content */}
-				<div className="mb-8">
+				<div className="px-8 pb-8">
 					<MarkdownRenderer
 						content={til.content}
 						className="prose-lg max-w-none"
 					/>
 				</div>
 
-				{/* TIL Reference */}
-				<TILReference
-					title={til.title}
-					url={`https://til.zhaochunqi.com/${til.ulid.toLowerCase()}`}
-				/>
-
-				{/* Tags */}
-				{til.tags.length > 0 && (
-					<footer className="pt-6 border-t border-gray-100">
-						<div className="flex flex-wrap gap-2 items-center">
-							<div className="flex items-center space-x-1 text-sm text-gray-500 mr-2">
-								<Tag size={14} />
-								<span>Tags:</span>
-							</div>
-							{til.tags.map((tag) => (
-								<span
-									key={tag}
-									className="
-										inline-block px-3 py-1 text-sm
-										bg-gray-100 text-gray-700 rounded-full
-										hover:bg-gray-200 transition-colors
-									"
-								>
-									{tag}
-								</span>
-							))}
-						</div>
-					</footer>
-				)}
+				{/* Tags using consistent component */}
+				<div className="px-8 pb-8 pt-0 border-t border-gray-100">
+					<Tags tags={til.tags} variant="page" showLabel={true} />
+				</div>
 			</article>
 
 			{/* Previous/Next Navigation */}

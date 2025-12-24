@@ -44,6 +44,42 @@ export async function getAllTILs(): Promise<TIL[]> {
 }
 
 /**
+ * 根据标签筛选 TIL 条目
+ */
+export async function getTILsByTag(tag: string): Promise<TIL[]> {
+	try {
+		const allTILs = await getAllTILs();
+		return allTILs.filter((til) => til.tags.includes(tag));
+	} catch (error) {
+		console.error(`Error fetching TIL entries for tag ${tag}:`, error);
+		return [];
+	}
+}
+
+/**
+ * 获取所有唯一的标签及其使用次数
+ */
+export async function getAllTags(): Promise<{ tag: string; count: number }[]> {
+	try {
+		const allTILs = await getAllTILs();
+		const tagCounts = new Map<string, number>();
+
+		allTILs.forEach((til) => {
+			til.tags.forEach((tag) => {
+				tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+			});
+		});
+
+		return Array.from(tagCounts.entries())
+			.map(([tag, count]) => ({ tag, count }))
+			.sort((a, b) => b.count - a.count);
+	} catch (error) {
+		console.error("Error fetching tags:", error);
+		return [];
+	}
+}
+
+/**
  * 清除内容获取器的缓存
  * 用于开发时的热重载
  */

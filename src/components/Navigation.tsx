@@ -1,4 +1,4 @@
-import { Archive, ChevronLeft, Home } from "lucide-react";
+import { Archive, ChevronLeft, Hash, Home } from "lucide-react";
 import Link from "next/link";
 
 interface NavigationProps {
@@ -20,6 +20,7 @@ export default function Navigation({
 }: NavigationProps) {
 	const isHome = currentPath === "/";
 	const isArchive = currentPath === "/archive";
+	const isTags = currentPath.startsWith("/tags");
 
 	return (
 		<nav className="flex items-center justify-between">
@@ -73,6 +74,20 @@ export default function Navigation({
 				>
 					<Archive size={14} />
 					<span>Archive</span>
+				</Link>
+				<Link
+					href="/tags"
+					className={`
+						flex items-center space-x-1 no-underline transition-colors
+						${
+							isTags
+								? "text-gray-900 font-medium"
+								: "text-gray-600 hover:text-gray-900"
+						}
+					`.trim()}
+				>
+					<Hash size={14} />
+					<span>Tags</span>
 				</Link>
 			</div>
 		</nav>

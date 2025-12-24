@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 	},
 	openGraph: {
 		type: "website",
-		locale: "en_US",
+		locale: "zh_CN",
 		url: "https://til.zhaochunqi.com",
 		siteName: "TIL - Today I Learned",
 		title: "TIL - Today I Learned",
@@ -61,7 +61,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className={inter.variable}>
+		<html lang="zh-CN" className={inter.variable}>
 			<body className="font-sans antialiased bg-white text-gray-900 dark:bg-gray-50 dark:text-gray-900">
 				<div className="min-h-screen">
 					<header className="border-b border-gray-200 bg-white">
