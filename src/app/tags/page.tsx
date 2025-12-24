@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllTags } from "../../lib/data";
+import { Tag } from "lucide-react";
 
 export default async function TagsPage() {
 	const tags = await getAllTags();
@@ -25,10 +26,15 @@ export default async function TagsPage() {
 							href={`/tags/${encodeURIComponent(tag)}`}
 							className="block p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md hover:border-blue-300 transition-all duration-200 group"
 						>
-							<h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-								{tag}
-							</h3>
-							<p className="text-sm text-gray-500 mt-1">{count} entries</p>
+							<div className="flex items-center space-x-3 mb-2">
+								<div className="p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
+									<Tag size={20} className="text-blue-600" />
+								</div>
+								<h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+									{tag}
+								</h3>
+							</div>
+							<p className="text-sm text-gray-500">{count} entries</p>
 						</Link>
 					))}
 				</div>

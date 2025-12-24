@@ -120,11 +120,10 @@ export default async function IndividualTILPage({
 
 	// Extract timestamp from ULID for display
 	const createdAt = new Date(decodeTime(til.ulid));
-	const formattedDate = createdAt.toLocaleDateString("en-US", {
+	const formattedDate = createdAt.toLocaleDateString("zh-CN", {
 		year: "numeric",
 		month: "long",
 		day: "numeric",
-		weekday: "long",
 	});
 
 	// JSON-LD structured data
@@ -164,11 +163,16 @@ export default async function IndividualTILPage({
 				{/* Header with enhanced styling for single page */}
 				<header className="px-8 pt-8 pb-6 border-b border-gray-100">
 					<h1 className="text-3xl font-bold text-gray-900 mb-4">{til.title}</h1>
-					<div className="flex items-center justify-between mb-6">
-						<time dateTime={createdAt.toISOString()} className="text-gray-500">
+					<div className="flex items-center gap-4 mb-6">
+						<time dateTime={createdAt.toISOString()} className="text-gray-500 whitespace-nowrap">
 							{formattedDate}
 						</time>
-						<div className="text-xs text-gray-400 font-mono">
+						{til.tags.length > 0 && (
+							<div className="flex-1">
+								<Tags tags={til.tags} variant="card" />
+							</div>
+						)}
+						<div className="text-xs text-gray-400 font-mono whitespace-nowrap">
 							id: {til.ulid}
 						</div>
 					</div>
@@ -188,10 +192,7 @@ export default async function IndividualTILPage({
 					/>
 				</div>
 
-				{/* Tags using consistent component */}
-				<div className="px-8 pb-8 pt-0 border-t border-gray-100">
-					<Tags tags={til.tags} variant="page" showLabel={true} />
-				</div>
+				
 			</article>
 
 			{/* Previous/Next Navigation */}

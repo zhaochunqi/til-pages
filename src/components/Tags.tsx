@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Tag } from "lucide-react";
 import type { TIL } from "../types";
 
 interface TagsProps {
@@ -19,8 +20,8 @@ export default function Tags({
 	if (tags.length === 0) return null;
 
 	const tagClassName = variant === "page" 
-		? "inline-block px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-blue-100 hover:text-blue-700 transition-colors"
-		: "inline-block px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-blue-100 hover:text-blue-700 transition-colors";
+		? "inline-flex items-center gap-1 px-3 py-1 text-sm text-gray-600 hover:text-blue-600 transition-colors"
+		: "inline-flex items-center gap-1 px-2 py-1 text-xs text-gray-500 hover:text-blue-600 transition-colors";
 
 	return (
 		<div className={`flex flex-wrap gap-2 ${showLabel ? "items-center" : ""}`}>
@@ -33,6 +34,7 @@ export default function Tags({
 					href={`/tags/${encodeURIComponent(tag)}`}
 					className={tagClassName}
 				>
+					<Tag size={variant === "page" ? 14 : 12} />
 					{tag}
 				</Link>
 			))}
