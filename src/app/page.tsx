@@ -1,6 +1,3 @@
-import { Archive, BookOpen } from "lucide-react";
-import Link from "next/link";
-
 import Pagination from "../components/Pagination";
 import TILCard from "../components/TILCard";
 import PageHeader from "../components/PageHeader";
@@ -26,18 +23,6 @@ export default async function Home() {
 			<PageHeader
 				title="Today I Learned"
 				description="A collection of things I learn every day"
-				icon={BookOpen}
-				showStats={allTILs.length > 0}
-				statsText={allTILs.length > 0 ? `${allTILs.length} total entries` : undefined}
-				actions={allTILs.length > 0 ? (
-					<Link
-						href="/archive"
-						className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-					>
-						<Archive size={14} />
-						<span>View all entries</span>
-					</Link>
-				) : undefined}
 			/>
 
 			{/* TIL Entries */}

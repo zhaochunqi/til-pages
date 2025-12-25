@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { Archive, Home } from "lucide-react";
-import Link from "next/link";
 import ArchiveItem from "../../components/ArchiveItem";
 import PageHeader from "../../components/PageHeader";
 import { ContentContainer } from "../../components/PageLayout";
@@ -27,16 +25,6 @@ export default async function ArchivePage() {
 			<PageHeader
 				title="Archive"
 				description={`All ${allTILs.length} TIL entries, sorted by date`}
-				icon={Archive}
-				actions={
-					<Link
-						href="/"
-						className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors text-sm"
-					>
-						<Home size={14} />
-						<span>Back to latest entries</span>
-					</Link>
-				}
 			/>
 
 			{/* Archive List */}

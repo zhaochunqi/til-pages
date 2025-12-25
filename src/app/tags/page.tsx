@@ -1,13 +1,11 @@
 import Link from "next/link";
+import { Tag } from "lucide-react";
 import { getAllTags } from "../../lib/data";
-import { Tag, Home } from "lucide-react";
 import PageHeader from "../../components/PageHeader";
 import { ContentContainer } from "../../components/PageLayout";
 
 export default async function TagsPage() {
 	const tags = await getAllTags();
-
-	const totalEntries = tags.reduce((sum, { count }) => sum + count, 0);
 
 	return (
 		<ContentContainer>
@@ -15,18 +13,6 @@ export default async function TagsPage() {
 			<PageHeader
 				title="Tags"
 				description="Browse TIL entries by tags. Click on any tag to see related entries."
-				icon={Tag}
-				showStats={tags.length > 0}
-				statsText={`${tags.length} tags, ${totalEntries} total entries`}
-				actions={
-					<Link
-						href="/"
-						className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-					>
-						<Home size={14} />
-						<span>Back to all entries</span>
-					</Link>
-				}
 			/>
 
 			{/* Tags Grid */}
