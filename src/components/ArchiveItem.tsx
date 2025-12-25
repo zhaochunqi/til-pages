@@ -24,9 +24,9 @@ export default function ArchiveItem({ til, className = "" }: ArchiveItemProps) {
 			<Link
 				href={`/${til.ulid.toLowerCase()}`}
 				className="
-					flex items-center justify-between text-gray-900 hover:text-blue-600
+					flex items-center justify-between text-gray-900 hover:text-gray-700
 					transition-colors duration-150
-					focus:outline-none focus:text-blue-600
+					focus:outline-none focus:text-gray-700
 					group
 				"
 			>

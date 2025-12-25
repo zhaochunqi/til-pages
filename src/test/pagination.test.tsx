@@ -60,7 +60,7 @@ describe("Pagination Component", () => {
 		render(<Pagination currentPage={2} totalPages={5} />);
 
 		const currentPageButton = screen.getByText("2");
-		expect(currentPageButton.className).toContain("bg-blue-600");
+		expect(currentPageButton.className).toContain("bg-gray-700");
 		expect(currentPageButton.className).toContain("text-white");
 	});
 

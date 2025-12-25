@@ -42,7 +42,7 @@ export default function TILCard({
 				<h2 className="text-xl font-semibold text-gray-900 mb-2">
 					<Link
 						href={`/${til.ulid.toLowerCase()}`}
-						className="hover:text-blue-600 transition-colors duration-200 group flex items-center space-x-1"
+						className="hover:text-gray-700 transition-colors duration-200 group flex items-center space-x-1"
 					>
 						<span>{til.title}</span>
 						<ExternalLink

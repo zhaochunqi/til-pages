@@ -93,7 +93,7 @@ export const MermaidRenderer = ({ children }: MermaidRendererProps) => {
             ) : (
                 <button
                     onClick={handleRenderClick}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors shadow-sm"
                     aria-label="渲染 Mermaid 图表"
                 >
                     <Play className="w-4 h-4" />

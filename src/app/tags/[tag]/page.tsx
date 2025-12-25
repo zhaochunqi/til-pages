@@ -46,13 +46,13 @@ export default async function TagPage({ params }: TagPageProps) {
 			<div className="mt-8 text-center">
 				<Link
 					href="/tags"
-					className="inline-block px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors mr-4"
+					className="inline-block px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors mr-4"
 				>
 					← Back to tags
 				</Link>
 				<Link
 					href="/"
-					className="inline-block px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors"
+					className="inline-block px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
 				>
 					← Back to all entries
 				</Link>
