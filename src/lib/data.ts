@@ -20,10 +20,20 @@ function parsedNoteToTIL(parsedNote: {
 }
 
 /**
+ * 构建时缓存 - 避免在静态生成时重复读取文件
+ */
+let buildTimeCache: TIL[] | null = null;
+
+/**
  * 获取所有 TIL 条目并按创建日期排序（最新的在前）
- * 这个函数会缓存结果以避免重复的文件系统读取
+ * 在生产构建时使用缓存以提高性能
  */
 export async function getAllTILs(): Promise<TIL[]> {
+	// 在生产构建时使用缓存
+	if (process.env.NODE_ENV === 'production' && buildTimeCache) {
+		return buildTimeCache;
+	}
+
 	try {
 		// 从内容获取器获取原始笔记
 		const rawNotes = await contentFetcher.fetchValidNotes();
@@ -36,7 +46,14 @@ export async function getAllTILs(): Promise<TIL[]> {
 
 		// 按创建日期排序（最新的在前），直接使用 ULID 字符串比较
 		// ULID 本身就是按时间排序的，可以直接进行字符串比较
-		return tils.sort((a, b) => b.ulid.localeCompare(a.ulid));
+		const sorted = tils.sort((a, b) => b.ulid.localeCompare(a.ulid));
+
+		// 在生产环境缓存结果
+		if (process.env.NODE_ENV === 'production') {
+			buildTimeCache = sorted;
+		}
+
+		return sorted;
 	} catch (error) {
 		console.error("Error fetching TIL entries:", error);
 		return [];

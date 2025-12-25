@@ -1,10 +1,23 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { PreBlock } from "./PreBlock";
-import { MermaidRenderer } from "./MermaidRenderer";
+
+// Lazy load MermaidRenderer to reduce initial bundle size
+// Note: We can't use ssr: false in Server Components, but the component itself is a Client Component
+const MermaidRenderer = dynamic(
+	() => import("./MermaidRenderer").then((mod) => ({ default: mod.MermaidRenderer })),
+	{
+		loading: () => (
+			<div className="mermaid relative min-h-[100px] flex items-center justify-center my-4 border border-gray-200 rounded bg-gray-50 p-4">
+				<div className="text-gray-500 text-sm">Loading diagram...</div>
+			</div>
+		),
+	}
+);
 
 interface MarkdownRendererProps {
 	content: string;
@@ -149,23 +162,33 @@ export default function MarkdownRenderer({
 								? srcStr.slice(2)
 								: srcStr;
 							const fullSrc = `${cdnPrefix}/${cleanSrc}`;
+
+							// 为 CDN 图片添加响应式加载
 							return (
 								<img
 									src={fullSrc}
-									alt={alt}
+									srcSet={`
+										${fullSrc}?w=400 400w,
+										${fullSrc}?w=800 800w,
+										${fullSrc}?w=1200 1200w
+									`}
+									sizes="(max-width: 768px) 100vw, 800px"
+									alt={alt || ""}
 									className="max-w-full h-auto rounded-lg shadow-md"
 									{...rest}
 									loading="lazy"
+									decoding="async"
 								/>
 							);
 						}
 						return (
 							<img
 								src={src}
-								alt={alt}
+								alt={alt || ""}
 								className="max-w-full h-auto rounded-lg shadow-md"
 								{...rest}
 								loading="lazy"
+								decoding="async"
 							/>
 						);
 					},
