@@ -23,7 +23,9 @@ export const metadata: Metadata = {
 	creator: "Chunqi Zhao",
 	robots: "index, follow",
 	icons: {
-		icon: "/til.svg",
+		icon: [
+			{ url: "/til.svg", type: "image/svg+xml" }
+		],
 		shortcut: "/til.svg",
 		apple: "/til.svg",
 	},
