@@ -161,7 +161,7 @@ export default async function IndividualTILPage({
 			{/* Article with enhanced single-page layout */}
 			<article className="bg-white border border-gray-200 rounded-lg overflow-hidden">
 				{/* Header with enhanced styling for single page */}
-				<header className="px-8 pt-8 pb-4 border-b border-gray-100">
+				<header className="px-8 pt-8 pb-4">
 					<h1 className="text-3xl font-bold text-gray-900 mb-4">{til.title}</h1>
 					<div className="flex items-center gap-4 mb-4">
 						<time dateTime={createdAt.toISOString()} className="text-gray-500 whitespace-nowrap">
