@@ -21,7 +21,15 @@ export default function PageHeader({
 				{/* Content wrapper for centering */}
 				<div className="text-center px-4">
 					{/* Title */}
-					<h1 className="text-lg md:text-xl font-bold text-gray-600 break-words hyphens-auto max-w-full leading-tight">
+					<h1
+						className="text-lg md:text-xl font-bold text-gray-600 break-words hyphens-auto max-w-full leading-tight"
+						style={{
+							fontFamily: 'var(--font-recursive), system-ui, -apple-system, sans-serif',
+							fontVariationSettings: '"MONO" 0, "CASL" 1, "wght" 600, "slnt" -15',
+							fontStyle: 'italic',
+							transform: 'skewX(-8deg)'
+						}}
+					>
 						{title}
 					</h1>
 
@@ -30,6 +38,13 @@ export default function PageHeader({
 						<p className="text-gray-600 mt-3 max-w-2xl mx-auto mb-0">
 							{description}
 						</p>
+					)}
+
+					{/* Decorative title with Ma Shan Zheng font for individual TIL pages */}
+					{(date || tags) && (
+						<div className="ma-shan-zheng-regular text-gray-400 text-2xl md:text-4xl mt-3">
+							{title}
+						</div>
 					)}
 
 					{/* Date and Tags for individual TIL pages */}

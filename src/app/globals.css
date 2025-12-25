@@ -82,8 +82,8 @@ code {
 	padding: 0.125rem 0.375rem;
 	border-radius: 0.375rem;
 	font-size: 0.875rem;
-	font-family:
-		"SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, monospace;
+	font-family: var(--font-recursive), "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, monospace;
+	font-variation-settings: "MONO" 1, "CASL" 0, "wght" 400;
 	color: #1f2937;
 }
 
@@ -103,6 +103,8 @@ pre code {
 	padding: 0;
 	border: none;
 	border-radius: 0;
+	font-family: var(--font-recursive), "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, monospace;
+	font-variation-settings: "MONO" 1, "CASL" 0, "wght" 400;
 }
 
 /* Lists for TIL content */
@@ -207,6 +209,20 @@ nav {
 /* Ensure minimal and clean design */
 .prose {
 	max-width: none;
+}
+
+/* Ma Shan Zheng font for decorative titles */
+.ma-shan-zheng-regular {
+	font-family: var(--font-ma-shan-zheng), cursive;
+	font-weight: 400;
+	font-style: normal;
+}
+
+/* Recursive Sans Casual Italic font */
+.recursive-sans-casual-italic {
+	font-family: var(--font-recursive), system-ui, -apple-system, sans-serif;
+	font-variation-settings: "MONO" 0, "CASL" 1, "wght" 600, "slnt" 0;
+	font-style: italic;
 }
 
 .prose img {

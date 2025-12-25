@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Ma_Shan_Zheng, Recursive } from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/github.css";
 import Navigation from "../components/Navigation";
@@ -9,6 +9,19 @@ const inter = Inter({
 	variable: "--font-inter",
 	display: "optional",
 	adjustFontFallback: true,
+});
+
+const recursive = Recursive({
+	variable: "--font-recursive",
+	display: "swap",
+	preload: true,
+});
+
+const maShanZheng = Ma_Shan_Zheng({
+	weight: "400",
+	variable: "--font-ma-shan-zheng",
+	display: "swap",
+	preload: true,
 });
 
 export const metadata: Metadata = {
@@ -51,6 +64,12 @@ export const metadata: Metadata = {
 		description: "A minimal collection of things I learn every day",
 		images: ["/til.svg"],
 	},
+	other: {
+		preconnect: [
+			"https://fonts.googleapis.com",
+			"https://fonts.gstatic.com"
+		]
+	}
 };
 
 export const viewport: Viewport = {
@@ -64,7 +83,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="zh-CN" className={inter.variable}>
+		<html lang="zh-CN" className={`${inter.variable} ${recursive.variable} ${maShanZheng.variable}`}>
 			<body className="font-sans antialiased bg-white text-gray-900 dark:bg-gray-50 dark:text-gray-900">
 				<div className="min-h-screen">
 					<header className="border-b border-gray-200 bg-white">
