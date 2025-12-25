@@ -163,16 +163,9 @@ export default function MarkdownRenderer({
 								: srcStr;
 							const fullSrc = `${cdnPrefix}/${cleanSrc}`;
 
-							// 为 CDN 图片添加响应式加载
 							return (
 								<img
 									src={fullSrc}
-									srcSet={`
-										${fullSrc}?w=400 400w,
-										${fullSrc}?w=800 800w,
-										${fullSrc}?w=1200 1200w
-									`}
-									sizes="(max-width: 768px) 100vw, 800px"
 									alt={alt || ""}
 									className="max-w-full h-auto rounded-lg shadow-md"
 									{...rest}
