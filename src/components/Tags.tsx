@@ -19,9 +19,9 @@ export default function Tags({
 }: TagsProps) {
 	if (tags.length === 0) return null;
 
-	const tagClassName = variant === "page" 
-		? "inline-flex items-center gap-1 px-3 py-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-		: "inline-flex items-center gap-1 px-2 py-1 text-xs text-gray-500 hover:text-gray-700 transition-colors";
+	const tagClassName = variant === "page"
+		? "recursive-tag-style inline-flex items-center gap-1 px-3 py-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+		: "recursive-tag-style inline-flex items-center gap-1 px-2 py-1 text-xs text-gray-500 hover:text-gray-700 transition-colors";
 
 	return (
 		<div className={`flex flex-wrap gap-2 ${showLabel ? "items-center" : ""}`}>

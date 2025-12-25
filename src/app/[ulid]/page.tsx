@@ -166,7 +166,7 @@ export default async function IndividualTILPage({
 						{til.tags.length > 0 && (
 							<Tags tags={til.tags} variant="card" />
 						)}
-						<div className="text-xs text-gray-400 font-mono whitespace-nowrap">
+						<div className="recursive-id-style text-xs text-gray-400 whitespace-nowrap">
 							id: {til.ulid}
 						</div>
 					</div>

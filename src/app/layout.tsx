@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Ma_Shan_Zheng, Recursive } from "next/font/google";
+import { Inter, Recursive, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/github.css";
 import Navigation from "../components/Navigation";
@@ -17,9 +17,8 @@ const recursive = Recursive({
 	preload: true,
 });
 
-const maShanZheng = Ma_Shan_Zheng({
-	weight: "400",
-	variable: "--font-ma-shan-zheng",
+const jetbrainsMono = JetBrains_Mono({
+	variable: "--font-jetbrains-mono",
 	display: "swap",
 	preload: true,
 });
@@ -83,7 +82,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="zh-CN" className={`${inter.variable} ${recursive.variable} ${maShanZheng.variable}`}>
+		<html lang="zh-CN" className={`${inter.variable} ${recursive.variable} ${jetbrainsMono.variable}`}>
 			<body className="font-sans antialiased bg-white text-gray-900 dark:bg-gray-50 dark:text-gray-900">
 				<div className="min-h-screen">
 					<header className="border-b border-gray-200 bg-white">

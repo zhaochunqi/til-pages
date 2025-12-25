@@ -40,13 +40,6 @@ export default function PageHeader({
 						</p>
 					)}
 
-					{/* Decorative title with Ma Shan Zheng font for individual TIL pages */}
-					{(date || tags) && (
-						<div className="ma-shan-zheng-regular text-gray-400 text-2xl md:text-4xl mt-3">
-							{title}
-						</div>
-					)}
-
 					{/* Date and Tags for individual TIL pages */}
 					{(date || tags) && (
 						<div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-3 text-gray-600 text-sm">
