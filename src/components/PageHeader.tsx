@@ -25,9 +25,8 @@ export default function PageHeader({
 						className="text-lg md:text-xl font-bold text-gray-600 break-words hyphens-auto max-w-full leading-tight"
 						style={{
 							fontFamily: 'var(--font-recursive), system-ui, -apple-system, sans-serif',
-							fontVariationSettings: '"MONO" 0, "CASL" 1, "wght" 600, "slnt" -15',
-							fontStyle: 'italic',
-							transform: 'skewX(-8deg)'
+							fontVariationSettings: '"MONO" 0, "CASL" 1, "wght" 600, "slnt" 0',
+							fontStyle: 'normal',
 						}}
 					>
 						{title}
