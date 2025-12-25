@@ -17,7 +17,7 @@ export default function TILReference({ title, url }: TILReferenceProps) {
 	};
 
 	return (
-		<div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4 mt-6 relative group">
+		<div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mt-6 relative group">
 			<div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
 				<Link size={12} />
 				<span>引用此 TIL</span>
