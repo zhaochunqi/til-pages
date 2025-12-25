@@ -55,13 +55,7 @@ describe("TILCard", () => {
 		expect(article?.className).toContain("custom-class");
 	});
 
-	it("shows preview content when showFullContent is false", () => {
-		render(<TILCard til={mockTIL} showFullContent={false} />);
-		// Should not render the full markdown (no h1)
-		expect(screen.queryByRole("heading", { level: 1 })).toBeFalsy();
-		// Should show preview text
-		expect(screen.getByText(/Hello World/)).toBeTruthy();
-	});
+
 
 	it("renders article with proper semantic structure", () => {
 		const { container } = render(<TILCard til={mockTIL} />);

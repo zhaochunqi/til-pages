@@ -153,7 +153,8 @@ export default async function IndividualTILPage({
 			<div className="w-full">
 				<PageHeader
 					title={til.title}
-					description={`${formattedDate} ${til.tags.length > 0 ? `• ${til.tags.join(", ")}` : ""}`}
+					date={formattedDate}
+					tags={til.tags}
 				/>
 			</div>
 

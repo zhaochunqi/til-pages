@@ -113,7 +113,7 @@ export default async function PaginationPage({ params }: PageProps) {
 			{currentPage.tils.length > 0 ? (
 				<div className="space-y-6">
 					{currentPage.tils.map((til) => (
-						<TILCard key={til.ulid} til={til} showFullContent={true} />
+						<TILCard key={til.ulid} til={til} />
 					))}
 				</div>
 			) : (

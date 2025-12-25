@@ -39,7 +39,7 @@ export default async function TagPage({ params }: TagPageProps) {
 
 			<div className="space-y-6">
 				{tils.map((til: TIL) => (
-					<TILCard key={til.ulid} til={til} showFullContent={false} />
+					<TILCard key={til.ulid} til={til} />
 				))}
 			</div>
 

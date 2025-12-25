@@ -1,6 +1,8 @@
 interface PageHeaderProps {
 	title: string;
-	description: string;
+	description?: string;
+	date?: string;
+	tags?: string[];
 }
 
 /**
@@ -10,21 +12,41 @@ interface PageHeaderProps {
 export default function PageHeader({
 	title,
 	description,
+	date,
+	tags,
 }: PageHeaderProps) {
 	return (
 		<header className="w-full mb-0">
-			<div className="max-w-3xl mx-auto h-32 flex items-center justify-center">
+			<div className="max-w-3xl mx-auto h-40 md:h-48 flex items-center justify-center">
 				{/* Content wrapper for centering */}
-				<div className="text-center">
+				<div className="text-center px-4">
 					{/* Title */}
-					<h1 className="text-3xl font-bold text-gray-900">
+					<h1 className="text-lg md:text-xl font-bold text-gray-600 break-words hyphens-auto max-w-full leading-tight">
 						{title}
 					</h1>
 
 					{/* Description */}
-					<p className="text-gray-600 mt-2 max-w-2xl mx-auto mb-0">
-						{description}
-					</p>
+					{description && (
+						<p className="text-gray-600 mt-3 max-w-2xl mx-auto mb-0">
+							{description}
+						</p>
+					)}
+
+					{/* Date and Tags for individual TIL pages */}
+					{(date || tags) && (
+						<div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-3 text-gray-600 text-sm">
+							{date && <span>{date}</span>}
+							{tags && tags.length > 0 && (
+								<div className="flex flex-wrap justify-center gap-2">
+									{tags.map((tag) => (
+										<span key={tag} className="text-gray-500 hover:text-gray-700 transition-colors">
+											#{tag}
+										</span>
+									))}
+								</div>
+							)}
+						</div>
+					)}
 				</div>
 			</div>
 		</header>

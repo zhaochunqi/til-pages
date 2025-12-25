@@ -7,7 +7,6 @@ import Tags from "./Tags";
 
 interface TILCardProps {
 	til: TIL;
-	showFullContent?: boolean;
 	className?: string;
 }
 
@@ -18,7 +17,6 @@ interface TILCardProps {
  */
 export default function TILCard({
 	til,
-	showFullContent = true,
 	className = "",
 }: TILCardProps) {
 	// Extract timestamp from ULID for display
@@ -59,17 +57,10 @@ export default function TILCard({
 
 			{/* Content */}
 			<div className="mb-4">
-				{showFullContent ? (
-					<MarkdownRenderer
-						content={til.content}
-						className="prose-sm max-w-none"
-					/>
-				) : (
-					<div className="text-gray-600 line-clamp-3">
-						{/* For preview mode, show first paragraph without markdown */}
-						{til.content.split("\n\n")[0].replace(/[#*`]/g, "")}
-					</div>
-				)}
+				<MarkdownRenderer
+					content={til.content}
+					className="prose-sm max-w-none"
+				/>
 			</div>
 
 			{/* Tags */}

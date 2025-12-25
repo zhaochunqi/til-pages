@@ -29,7 +29,7 @@ export default async function Home() {
 			{firstPage.tils.length > 0 ? (
 				<div className="space-y-6">
 					{firstPage.tils.map((til) => (
-						<TILCard key={til.ulid} til={til} showFullContent={true} />
+						<TILCard key={til.ulid} til={til} />
 					))}
 				</div>
 			) : (
