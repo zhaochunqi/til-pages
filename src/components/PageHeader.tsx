@@ -12,7 +12,7 @@ export default function PageHeader({
 	description,
 }: PageHeaderProps) {
 	return (
-		<header className="w-full">
+		<header className="w-full mb-0">
 			<div className="max-w-3xl mx-auto h-32 flex items-center justify-center">
 				{/* Content wrapper for centering */}
 				<div className="text-center">
@@ -22,7 +22,7 @@ export default function PageHeader({
 					</h1>
 
 					{/* Description */}
-					<p className="text-gray-600 mt-2 max-w-2xl mx-auto">
+					<p className="text-gray-600 mt-2 max-w-2xl mx-auto mb-0">
 						{description}
 					</p>
 				</div>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import {
 	Archive,
-	Calendar,
 	ChevronLeft,
 	ChevronRight,
 	Home,
@@ -10,7 +9,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { decodeTime, isValid as isValidULID } from "ulid";
 import MarkdownRenderer from "../../components/MarkdownRenderer";
-import { Breadcrumb } from "../../components/Navigation";
+import PageHeader from "../../components/PageHeader";
 import Tags from "../../components/Tags";
 import TILReference from "../../components/TILReference";
 import { getAllTILs } from "../../lib/data";
@@ -143,41 +142,35 @@ export default async function IndividualTILPage({
 	};
 
 	return (
-		<div className="space-y-8">
+		<div>
 			{/* Add JSON-LD to the page */}
 			<script
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
 
-			{/* Breadcrumb Navigation */}
-			<Breadcrumb
-				items={[
-					{ label: "Home", href: "/", icon: <Home size={12} /> },
-					{ label: til.title, icon: <Calendar size={12} /> },
-				]}
-			/>
+			{/* Page Header for consistency */}
+			<div className="w-full">
+				<PageHeader
+					title={til.title}
+					description={`${formattedDate} ${til.tags.length > 0 ? `• ${til.tags.join(", ")}` : ""}`}
+				/>
+			</div>
 
 			{/* Article with enhanced single-page layout */}
 			<article className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-				{/* Header with enhanced styling for single page */}
-				<header className="px-8 pt-8 pb-4">
-					<h1 className="text-3xl font-bold text-gray-900 mb-4">{til.title}</h1>
-					<div className="flex items-center gap-4 mb-4">
-						<time dateTime={createdAt.toISOString()} className="text-gray-500 whitespace-nowrap">
-							{formattedDate}
-						</time>
+				{/* Header with TIL Reference and ID */}
+				<header className="px-8 pt-4 pb-4">
+					<div className="flex items-center justify-between">
 						{til.tags.length > 0 && (
-							<div className="flex-1">
-								<Tags tags={til.tags} variant="card" />
-							</div>
+							<Tags tags={til.tags} variant="card" />
 						)}
 						<div className="text-xs text-gray-400 font-mono whitespace-nowrap">
 							id: {til.ulid}
 						</div>
 					</div>
 
-					{/* TIL Reference - moved to header */}
+					{/* TIL Reference */}
 					<TILReference
 						title={til.title}
 						url={`https://til.zhaochunqi.com/${til.ulid.toLowerCase()}`}
