@@ -1,10 +1,12 @@
-import { Archive, BookOpen, Calendar } from "lucide-react";
+import { Archive, BookOpen } from "lucide-react";
 import Link from "next/link";
 
 import Pagination from "../components/Pagination";
 import TILCard from "../components/TILCard";
+import PageHeader from "../components/PageHeader";
+import { ContentContainer } from "../components/PageLayout";
 import { getAllTILs } from "../lib/data";
-import { Page, type TIL } from "../types";
+import { Page } from "../types";
 
 /**
  * Homepage component displaying the latest TIL entries with pagination
@@ -19,29 +21,24 @@ export default async function Home() {
 	const totalPages = Page.getTotalPages(allTILs.length);
 
 	return (
-		<div className="space-y-8">
+		<ContentContainer>
 			{/* Page Header */}
-			<div className="text-center">
-				<div className="flex items-baseline justify-center space-x-3 mb-2">
-					<BookOpen size={28} className="text-gray-700" />
-					<h1 className="text-3xl font-bold text-gray-900">Today I Learned</h1>
-				</div>
-				<p className="text-gray-600 flex items-center justify-center space-x-1">
-					<Calendar size={14} />
-					<span>A collection of things I learn every day</span>
-				</p>
-				{allTILs.length > 0 && (
-					<div className="mt-4">
-						<Link
-							href="/archive"
-							className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-						>
-							<Archive size={14} />
-							<span>View all {allTILs.length} entries</span>
-						</Link>
-					</div>
-				)}
-			</div>
+			<PageHeader
+				title="Today I Learned"
+				description="A collection of things I learn every day"
+				icon={BookOpen}
+				showStats={allTILs.length > 0}
+				statsText={allTILs.length > 0 ? `${allTILs.length} total entries` : undefined}
+				actions={allTILs.length > 0 ? (
+					<Link
+						href="/archive"
+						className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+					>
+						<Archive size={14} />
+						<span>View all entries</span>
+					</Link>
+				) : undefined}
+			/>
 
 			{/* TIL Entries */}
 			{firstPage.tils.length > 0 ? (
@@ -62,6 +59,6 @@ export default async function Home() {
 			{totalPages > 1 && (
 				<Pagination currentPage={1} totalPages={totalPages} basePath="/page" />
 			)}
-		</div>
+		</ContentContainer>
 	);
 }

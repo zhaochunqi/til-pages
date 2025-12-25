@@ -1,19 +1,35 @@
 import Link from "next/link";
 import { getAllTags } from "../../lib/data";
-import { Tag } from "lucide-react";
+import { Tag, Home } from "lucide-react";
+import PageHeader from "../../components/PageHeader";
+import { ContentContainer } from "../../components/PageLayout";
 
 export default async function TagsPage() {
 	const tags = await getAllTags();
 
-	return (
-		<div className="max-w-4xl mx-auto px-4 py-8">
-			<header className="mb-8">
-				<h1 className="text-3xl font-bold text-gray-900 mb-2">Tags</h1>
-				<p className="text-gray-600">
-					Browse TIL entries by tags. Click on any tag to see related entries.
-				</p>
-			</header>
+	const totalEntries = tags.reduce((sum, { count }) => sum + count, 0);
 
+	return (
+		<ContentContainer>
+			{/* Page Header */}
+			<PageHeader
+				title="Tags"
+				description="Browse TIL entries by tags. Click on any tag to see related entries."
+				icon={Tag}
+				showStats={tags.length > 0}
+				statsText={`${tags.length} tags, ${totalEntries} total entries`}
+				actions={
+					<Link
+						href="/"
+						className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+					>
+						<Home size={14} />
+						<span>Back to all entries</span>
+					</Link>
+				}
+			/>
+
+			{/* Tags Grid */}
 			{tags.length === 0 ? (
 				<div className="text-center py-12">
 					<p className="text-gray-500">No tags found.</p>
@@ -39,15 +55,6 @@ export default async function TagsPage() {
 					))}
 				</div>
 			)}
-
-			<div className="mt-8 text-center">
-				<Link
-					href="/"
-					className="inline-block px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-				>
-					← Back to all entries
-				</Link>
-			</div>
-		</div>
+		</ContentContainer>
 	);
 }

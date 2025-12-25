@@ -67,12 +67,12 @@ export default function RootLayout({
 		<html lang="zh-CN" className={inter.variable}>
 			<body className="font-sans antialiased bg-white text-gray-900 dark:bg-gray-50 dark:text-gray-900">
 				<div className="min-h-screen">
-					<header className="border-b border-gray-200 bg-white" style={{ contain: 'layout style' }}>
+					<header className="border-b border-gray-200 bg-white">
 						<div className="max-w-4xl mx-auto px-4 py-6" style={{ minHeight: '72px' }}>
 							<Navigation />
 						</div>
 					</header>
-					<main className="max-w-4xl mx-auto px-4 py-8" style={{ contain: 'layout style', minHeight: '400px' }}>{children}</main>
+					<main className="max-w-4xl mx-auto px-4 pb-8" style={{ minHeight: '500px' }}>{children}</main>
 					<footer className="border-t border-gray-200 bg-white mt-16" style={{ contain: 'layout style' }}>
 						<div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-gray-500" style={{ minHeight: '60px' }}>
 							<p>A minimal collection of daily learnings</p>

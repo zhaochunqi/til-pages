@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Archive, Calendar, Home } from "lucide-react";
+import { Archive, Home } from "lucide-react";
 import Link from "next/link";
 import ArchiveItem from "../../components/ArchiveItem";
-import { Breadcrumb } from "../../components/Navigation";
+import PageHeader from "../../components/PageHeader";
+import { ContentContainer } from "../../components/PageLayout";
 import { getAllTILs } from "../../lib/data";
-import type { TIL } from "../../types";
 
 export const metadata: Metadata = {
 	title: "Archive",
@@ -22,26 +22,22 @@ export default async function ArchivePage() {
 	const allTILs = await getAllTILs();
 
 	return (
-		<div className="space-y-8">
-			{/* Breadcrumb Navigation */}
-			<Breadcrumb
-				items={[
-					{ label: "Home", href: "/", icon: <Home size={12} /> },
-					{ label: "Archive", icon: <Archive size={12} /> },
-				]}
-			/>
-
+		<ContentContainer>
 			{/* Page Header */}
-			<div className="text-center">
-				<div className="flex items-baseline justify-center space-x-3 mb-2">
-					<Archive size={28} className="text-gray-700" />
-					<h1 className="text-3xl font-bold text-gray-900">Archive</h1>
-				</div>
-				<p className="text-gray-600 flex items-center justify-center space-x-1">
-					<Calendar size={14} />
-					<span>All {allTILs.length} TIL entries, sorted by date</span>
-				</p>
-			</div>
+			<PageHeader
+				title="Archive"
+				description={`All ${allTILs.length} TIL entries, sorted by date`}
+				icon={Archive}
+				actions={
+					<Link
+						href="/"
+						className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors text-sm"
+					>
+						<Home size={14} />
+						<span>Back to latest entries</span>
+					</Link>
+				}
+			/>
 
 			{/* Archive List */}
 			{allTILs.length > 0 ? (
@@ -61,17 +57,6 @@ export default async function ArchivePage() {
 					</p>
 				</div>
 			)}
-
-			{/* Footer Navigation */}
-			<div className="flex justify-center">
-				<Link
-					href="/"
-					className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors text-sm"
-				>
-					<Home size={14} />
-					<span>Back to latest entries</span>
-				</Link>
-			</div>
-		</div>
+		</ContentContainer>
 	);
 }
