@@ -1,14 +1,27 @@
 @import "tailwindcss";
 
+/* Font fallback optimization to prevent CLS */
+@supports (font-size: -moz-initial) {
+	@font-face {
+		font-family: 'Inter-fallback';
+		size-adjust: 92.81%;
+		src: local('Arial');
+		ascent-override: 95%;
+	}
+}
+
 /* Minimal custom styles - rely on Tailwind utilities */
 body {
 	font-family:
-		var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+		var(--font-inter), 'Inter-fallback', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
 		Roboto, sans-serif;
 	line-height: 1.7;
 	font-size: 16px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	/* Prevent layout shift during font loading */
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
 }
 
 /* Minimal typography for TIL content */
@@ -175,6 +188,22 @@ td {
 	}
 }
 
+/* Prevent CLS from dynamic content */
+img, svg, iframe, embed, object {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Ensure stable container dimensions */
+.prose-lg {
+	min-height: 100px;
+}
+
+/* Fix navigation layout stability */
+nav {
+	contain: layout style;
+}
+
 /* Ensure minimal and clean design */
 .prose {
 	max-width: none;
@@ -183,10 +212,26 @@ td {
 .prose img {
 	border-radius: 0.5rem;
 	margin: 2rem 0;
+	aspect-ratio: attr(width) / attr(height);
+	background: #f3f4f6;
 }
 
 .prose hr {
 	border: none;
 	border-top: 1px solid #e5e7eb;
 	margin: 3rem 0;
+}
+
+/* Pre-render content dimensions */
+.prose h1, .prose h2, .prose h3 {
+	contain: layout style;
+}
+
+.prose p, .prose ul, .prose ol {
+	contain: layout style;
+}
+
+.prose pre {
+	contain: layout style;
+	min-height: 3rem;
 }

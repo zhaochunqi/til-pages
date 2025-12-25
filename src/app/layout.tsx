@@ -7,7 +7,8 @@ import Navigation from "../components/Navigation";
 const inter = Inter({
 	subsets: ["latin"],
 	variable: "--font-inter",
-	display: "swap",
+	display: "optional",
+	adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
@@ -64,14 +65,14 @@ export default function RootLayout({
 		<html lang="zh-CN" className={inter.variable}>
 			<body className="font-sans antialiased bg-white text-gray-900 dark:bg-gray-50 dark:text-gray-900">
 				<div className="min-h-screen">
-					<header className="border-b border-gray-200 bg-white">
-						<div className="max-w-4xl mx-auto px-4 py-6">
+					<header className="border-b border-gray-200 bg-white" style={{ contain: 'layout style' }}>
+						<div className="max-w-4xl mx-auto px-4 py-6" style={{ minHeight: '72px' }}>
 							<Navigation />
 						</div>
 					</header>
-					<main className="max-w-4xl mx-auto px-4 py-8">{children}</main>
-					<footer className="border-t border-gray-200 bg-white mt-16">
-						<div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
+					<main className="max-w-4xl mx-auto px-4 py-8" style={{ contain: 'layout style', minHeight: '400px' }}>{children}</main>
+					<footer className="border-t border-gray-200 bg-white mt-16" style={{ contain: 'layout style' }}>
+						<div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-gray-500" style={{ minHeight: '60px' }}>
 							<p>A minimal collection of daily learnings</p>
 						</div>
 					</footer>
