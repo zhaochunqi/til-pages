@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import TILCard from "../../../components/TILCard";
 import type { TIL } from "../../../types";
 import { getTILsByTag } from "../../../lib/data";
+import { slugToTag } from "../../../lib/slug";
 
 interface TagPageProps {
 	params: Promise<{ tag: string }>;
@@ -10,16 +11,17 @@ interface TagPageProps {
 
 export async function generateStaticParams() {
 	const { getAllTags } = await import("../../../lib/data");
+	const { tagToSlug } = await import("../../../lib/slug");
 	const tags = await getAllTags();
 	
 	return tags.map(({ tag }) => ({
-		tag: encodeURIComponent(tag),
+		tag: tagToSlug(tag),
 	}));
 }
 
 export default async function TagPage({ params }: TagPageProps) {
-	const { tag: encodedTag } = await params;
-	const tag = decodeURIComponent(encodedTag);
+	const { tag: tagSlug } = await params;
+	const tag = slugToTag(tagSlug);
 	const tils = await getTILsByTag(tag);
 
 	if (tils.length === 0) {

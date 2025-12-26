@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import type { TIL } from "../types";
+import { tagToSlug } from "../lib/slug";
 
 interface TagsProps {
 	tags: TIL["tags"];
@@ -31,7 +32,7 @@ export default function Tags({
 			{tags.map((tag) => (
 				<Link
 					key={tag}
-					href={`/tags/${encodeURIComponent(tag)}`}
+					href={`/tags/${tagToSlug(tag)}`}
 					className={tagClassName}
 				>
 					<Tag size={variant === "page" ? 14 : 12} />

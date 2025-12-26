@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import { getAllTags } from "../../lib/data";
+import { tagToSlug } from "../../lib/slug";
 import PageHeader from "../../components/PageHeader";
 import { ContentContainer } from "../../components/PageLayout";
 
@@ -25,7 +26,7 @@ export default async function TagsPage() {
 					{tags.map(({ tag, count }) => (
 						<Link
 							key={tag}
-							href={`/tags/${encodeURIComponent(tag)}`}
+							href={`/tags/${tagToSlug(tag)}`}
 							className="block p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md hover:border-gray-400 transition-all duration-200 group"
 						>
 							<div className="flex items-center space-x-3 mb-2">
