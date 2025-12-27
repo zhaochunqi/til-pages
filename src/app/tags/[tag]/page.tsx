@@ -4,6 +4,8 @@ import TILCard from "../../../components/TILCard";
 import type { TIL } from "../../../types";
 import { getTILsByTag, getAllTags } from "../../../lib/data";
 import { slugToTag, tagToSlug } from "../../../lib/slug";
+import PageHeader from "../../../components/PageHeader";
+import { ContentContainer } from "../../../components/PageLayout";
 
 interface TagPageProps {
 	params: Promise<{ tag: string }>;
@@ -27,22 +29,21 @@ export default async function TagPage({ params }: TagPageProps) {
 	}
 
 	return (
-		<div className="max-w-4xl mx-auto px-4 py-8">
-			<header className="mb-8">
-				<h1 className="text-3xl font-bold text-gray-900 mb-2">
-					Tag: {tag}
-				</h1>
-				<p className="text-gray-600">
-					{tils.length} {tils.length === 1 ? "entry" : "entries"} found
-				</p>
-			</header>
+		<ContentContainer>
+			{/* Page Header */}
+			<PageHeader
+				title={`Tag: ${tag}`}
+				description={`${tils.length} ${tils.length === 1 ? "entry" : "entries"} found`}
+			/>
 
+			{/* TIL Cards */}
 			<div className="space-y-6">
 				{tils.map((til: TIL) => (
 					<TILCard key={til.ulid} til={til} />
 				))}
 			</div>
 
+			{/* Back Navigation */}
 			<div className="mt-8 text-center">
 				<Link
 					href="/tags"
@@ -57,6 +58,6 @@ export default async function TagPage({ params }: TagPageProps) {
 					← Back to all entries
 				</Link>
 			</div>
-		</div>
+		</ContentContainer>
 	);
 }
