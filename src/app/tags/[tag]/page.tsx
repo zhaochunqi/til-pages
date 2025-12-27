@@ -2,16 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import TILCard from "../../../components/TILCard";
 import type { TIL } from "../../../types";
-import { getTILsByTag } from "../../../lib/data";
-import { slugToTag } from "../../../lib/slug";
+import { getTILsByTag, getAllTags } from "../../../lib/data";
+import { slugToTag, tagToSlug } from "../../../lib/slug";
 
 interface TagPageProps {
 	params: Promise<{ tag: string }>;
 }
 
 export async function generateStaticParams() {
-	const { getAllTags } = await import("../../../lib/data");
-	const { tagToSlug } = await import("../../../lib/slug");
 	const tags = await getAllTags();
 	
 	return tags.map(({ tag }) => ({
